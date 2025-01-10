@@ -276,59 +276,59 @@ public class DashBoard extends javax.swing.JFrame {
         title_app.setForeground(new java.awt.Color(255, 255, 204));
         title_app.setText("Thẻ ra vào công ty");
         title_app.setAlignmentX(0.5F);
-        jPanel4.add(title_app, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 245, 73));
+        jPanel4.add(title_app, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 70, 245, 73));
 
         label_img.setBackground(new java.awt.Color(255, 102, 102));
         label_img.setForeground(new java.awt.Color(255, 51, 153));
         label_img.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
-        jPanel4.add(label_img, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 118, 176));
+        jPanel4.add(label_img, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 118, 176));
 
         title_employee_code.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         title_employee_code.setForeground(new java.awt.Color(255, 255, 255));
         title_employee_code.setText("Mã nhân viên :");
-        jPanel4.add(title_employee_code, new org.netbeans.lib.awtextra.AbsoluteConstraints(181, 107, -1, -1));
+        jPanel4.add(title_employee_code, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, -1, -1));
 
         title_name.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         title_name.setForeground(new java.awt.Color(255, 255, 255));
         title_name.setText("Họ tên : ");
-        jPanel4.add(title_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(181, 151, 97, -1));
+        jPanel4.add(title_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 200, 97, -1));
 
         title_birthday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         title_birthday.setForeground(new java.awt.Color(255, 255, 255));
         title_birthday.setText("Ngày sinh : ");
-        jPanel4.add(title_birthday, new org.netbeans.lib.awtextra.AbsoluteConstraints(181, 195, -1, -1));
+        jPanel4.add(title_birthday, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, -1, -1));
 
         title_position.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         title_position.setForeground(new java.awt.Color(255, 255, 255));
         title_position.setText("Chức vụ :");
-        jPanel4.add(title_position, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, 78, -1));
+        jPanel4.add(title_position, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, 78, -1));
 
         txt_employee_code.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_employee_code.setForeground(new java.awt.Color(255, 255, 255));
         txt_employee_code.setText("11111");
-        jPanel4.add(txt_employee_code, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 240, 30));
+        jPanel4.add(txt_employee_code, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, 240, 30));
 
         txt_name.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_name.setForeground(new java.awt.Color(255, 255, 255));
         txt_name.setText("111111111111");
-        jPanel4.add(txt_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, 240, 20));
+        jPanel4.add(txt_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, 240, 20));
         jPanel4.add(txt_birthday, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 200, 471, -1));
 
         txt_position.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_position.setForeground(new java.awt.Color(255, 255, 255));
         txt_position.setText("11111111111111");
-        jPanel4.add(txt_position, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 230, 20));
+        jPanel4.add(txt_position, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 280, 230, 20));
 
         title_status.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         title_status.setForeground(new java.awt.Color(255, 255, 255));
         title_status.setText("Trạng thái thẻ :");
-        jPanel4.add(title_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(181, 283, -1, -1));
+        jPanel4.add(title_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, -1, -1));
 
         txt_status.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_status.setForeground(new java.awt.Color(255, 255, 255));
         txt_status.setText("1111111111111");
         txt_status.setAlignmentX(0.5F);
-        jPanel4.add(txt_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 280, 240, 20));
+        jPanel4.add(txt_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 320, 240, 20));
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(884, 478, 37, -1));
 
         exit.setBackground(new java.awt.Color(231, 73, 134));
@@ -343,32 +343,34 @@ public class DashBoard extends javax.swing.JFrame {
         });
         jPanel4.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 0, 26, 28));
 
+        btnChangeImage.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnChangeImage.setText("Thay ảnh");
         btnChangeImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChangeImageActionPerformed(evt);
             }
         });
-        jPanel4.add(btnChangeImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 303, 90, 30));
+        jPanel4.add(btnChangeImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 110, 30));
 
         txt_dob.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_dob.setForeground(new java.awt.Color(255, 255, 255));
         txt_dob.setText("1111111111111111");
-        jPanel4.add(txt_dob, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 196, 230, 20));
+        jPanel4.add(txt_dob, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 230, 20));
 
-        txt_time.setFont(new java.awt.Font("Tahoma", 2, 14)); // NOI18N
+        txt_time.setFont(new java.awt.Font("Tahoma", 2, 18)); // NOI18N
         txt_time.setForeground(new java.awt.Color(0, 153, 204));
         txt_time.setText("null");
         txt_time.setAlignmentX(0.5F);
-        jPanel4.add(txt_time, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 350, 150, 30));
+        jPanel4.add(txt_time, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 200, 30));
 
+        btn_increase.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btn_increase.setText("Tăng Ngày");
         btn_increase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_increaseActionPerformed(evt);
             }
         });
-        jPanel4.add(btn_increase, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 320, -1, -1));
+        jPanel4.add(btn_increase, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, -1, -1));
 
         javax.swing.GroupLayout pnl_overlayLayout = new javax.swing.GroupLayout(pnl_overlay);
         pnl_overlay.setLayout(pnl_overlayLayout);
@@ -389,9 +391,7 @@ public class DashBoard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 9, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
