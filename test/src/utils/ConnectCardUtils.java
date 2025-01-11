@@ -227,6 +227,36 @@ public class ConnectCardUtils {
             e.printStackTrace();
         }
     }
+    public static void sendExtendedApduFromStringForUpdateImage(byte[] apduCommand) throws InterruptedException {
+        System.out.println("apduCommand length: " + (apduCommand != null ? apduCommand.length : "null"));
+        try {
+            // Convert the hex string to byte array
+            CommandAPDU command = new CommandAPDU(0x00, 0x10, 0x00, 0x00, apduCommand);
+            // Transmit the command
+            ResponseAPDU response = chanel.transmit(command);
+            String statusWord = Integer.toHexString(response.getSW());
+            System.out.println("Response SW: " + statusWord);
+
+            if ("9000".equals(statusWord)) {
+                JOptionPane.showMessageDialog(null, "Cập nhật ảnh thành công");
+                System.out.println("APDU Command executed successfully!");
+            } else {
+                System.out.println("APDU Command failed with status: " + statusWord);
+            }
+        } catch (IllegalArgumentException e) {
+//            JOptionPane.showMessageDialog(jfame, "Lỗi: Chuỗi APDU không đúng định dạng Hex.");
+            System.out.println("Error: Invalid Hex format for APDU command.");
+            e.printStackTrace();
+        } catch (CardException e) {
+//            JOptionPane.showMessageDialog(jfame, "Lỗi: Không thể truyền lệnh đến thẻ.");
+            System.out.println("CardException occurred: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(jfame, "Đã xảy ra lỗi không xác định.");
+            System.out.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     public static byte[] sendApduHaveResponse(CommandDefine commandDefine) {
         byte[] result = null;

@@ -372,8 +372,8 @@ public class CreateNewCard extends javax.swing.JFrame {
     private void btn_choie_imgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_choie_imgActionPerformed
         // TODO add your handling code here:
         try {
-            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
-            imageSelector.openImageSelector(this, label_img);
+//            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
+            ImageSelectorComponent.openImageSelector(this, label_img);
             Image img_select = ImageSelectorComponent.selectedImage;
             //        System.out.println("Image Selected : \n" + ImageUtils.imageToHex(img_select) );
             long sizeInBytes = ImageUtils.calculateImageSize(img_select);

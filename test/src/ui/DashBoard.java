@@ -455,7 +455,7 @@ public class DashBoard extends javax.swing.JFrame {
 //        Authenzation auth = new Authenzation(status);
 //        status
 //        if(status){
-            boolean allowCheckin = true;
+        boolean allowCheckin = true;
         String id = getId();
         System.out.println("Value of Id : " + id);
 
@@ -525,7 +525,6 @@ public class DashBoard extends javax.swing.JFrame {
 //        }else {
 //            JOptionPane.showMessageDialog(this, "Xác thực không thành công nên không thể checkin");
 //        }
-        
 
 
     }//GEN-LAST:event_btnCheckinActionPerformed
@@ -534,89 +533,89 @@ public class DashBoard extends javax.swing.JFrame {
 //        try {
 //            boolean statusAuth = sign_process();
 //            if (statusAuth) {
-                boolean allowCheckout = true;
-                String id = getId();
-                System.out.println("Value of Id : " + id);
+        boolean allowCheckout = true;
+        String id = getId();
+        System.out.println("Value of Id : " + id);
 
-                // Lấy dữ liệu từ database
-                List data = EmployeeDAO.queryDatabase(id);
-                String checkoutData = data.toArray()[3].toString();
-                String checkinData = "";
-                if (data.size() > 2 && data.get(2) != null) {
-                    checkinData = data.get(2).toString();
+        // Lấy dữ liệu từ database
+        List data = EmployeeDAO.queryDatabase(id);
+        String checkoutData = data.toArray()[3].toString();
+        String checkinData = "";
+        if (data.size() > 2 && data.get(2) != null) {
+            checkinData = data.get(2).toString();
+        }
+        String now = getTime();
+        boolean hasCheckedInToday = false;
+
+        // Kiểm tra xem nhân viên đã checkin hôm nay chưa
+        if (!checkinData.isEmpty()) {
+            String[] times = checkinData.split("-");
+            for (String time : times) {
+                String date = time.split(" ")[1];
+                if (date.equals(now.split(" ")[1])) {
+                    hasCheckedInToday = true;
+                    break;
                 }
-                String now = getTime();
-                boolean hasCheckedInToday = false;
+            }
+        }
 
-                // Kiểm tra xem nhân viên đã checkin hôm nay chưa
-                if (!checkinData.isEmpty()) {
-                    String[] times = checkinData.split("-");
-                    for (String time : times) {
-                        String date = time.split(" ")[1];
-                        if (date.equals(now.split(" ")[1])) {
-                            hasCheckedInToday = true;
-                            break;
-                        }
-                    }
+        if (!hasCheckedInToday) {
+            JOptionPane.showMessageDialog(this, "Bạn cần checkin trước khi checkout.");
+            return; // Thoát nếu chưa checkin
+        }
+
+        // Kiểm tra xem nhân viên đã checkout hôm nay chưa
+        if (!checkoutData.isEmpty()) {
+            String[] times = checkoutData.split("-");
+            for (String time : times) {
+                String date = time.split(" ")[1];
+                if (date.equals(now.split(" ")[1])) {
+                    allowCheckout = false;
+                    break;
                 }
+            }
+        }
 
-                if (!hasCheckedInToday) {
-                    JOptionPane.showMessageDialog(this, "Bạn cần checkin trước khi checkout.");
-                    return; // Thoát nếu chưa checkin
-                }
+        if (allowCheckout) {
+            // Gửi lệnh checkout tới applet
+            byte[] cmdSetCheckout = {(byte) 0x00, (byte) 0x21, (byte) 0x00, (byte) 0x00};
+            byte[] data1 = now.getBytes();
+            System.out.println("Gửi checkout: " + now);
+            connectCardUtils.sendAPDUtoApplet(cmdSetCheckout, data1);
 
-                // Kiểm tra xem nhân viên đã checkout hôm nay chưa
-                if (!checkoutData.isEmpty()) {
-                    String[] times = checkoutData.split("-");
-                    for (String time : times) {
-                        String date = time.split(" ")[1];
-                        if (date.equals(now.split(" ")[1])) {
-                            allowCheckout = false;
-                            break;
-                        }
-                    }
-                }
+            // Kiểm tra phản hồi từ applet
+            if (connectCardUtils.resAPDU.getSW1() == 0x90) {
+                System.out.println("Checkout lưu thành công trong applet.");
 
-                if (allowCheckout) {
-                    // Gửi lệnh checkout tới applet
-                    byte[] cmdSetCheckout = {(byte) 0x00, (byte) 0x21, (byte) 0x00, (byte) 0x00};
-                    byte[] data1 = now.getBytes();
-                    System.out.println("Gửi checkout: " + now);
-                    connectCardUtils.sendAPDUtoApplet(cmdSetCheckout, data1);
+                // Lấy dữ liệu checkout từ applet
+                byte[] cmdGetCheckout = {(byte) 0x00, (byte) 0x23, (byte) 0x00, (byte) 0x00};
+                connectCardUtils.sendAPDUtoApplet(cmdGetCheckout, new byte[0]);
 
-                    // Kiểm tra phản hồi từ applet
-                    if (connectCardUtils.resAPDU.getSW1() == 0x90) {
-                        System.out.println("Checkout lưu thành công trong applet.");
+                if (connectCardUtils.resAPDU.getSW1() == 0x90) {
+                    byte[] responseData = connectCardUtils.resAPDU.getData(); // Dữ liệu phản hồi từ applet
+                    String timeFromApplet = new String(responseData).trim();
+                    System.out.println("Dữ liệu checkout từ applet: " + timeFromApplet);
 
-                        // Lấy dữ liệu checkout từ applet
-                        byte[] cmdGetCheckout = {(byte) 0x00, (byte) 0x23, (byte) 0x00, (byte) 0x00};
-                        connectCardUtils.sendAPDUtoApplet(cmdGetCheckout, new byte[0]);
+                    // Ghi dữ liệu vào database
+                    String dataSend = !checkoutData.isEmpty() ? checkoutData + "-" + timeFromApplet : timeFromApplet;
+                    int result = EmployeeDAO.setTimeCheck(false, id, dataSend);
 
-                        if (connectCardUtils.resAPDU.getSW1() == 0x90) {
-                            byte[] responseData = connectCardUtils.resAPDU.getData(); // Dữ liệu phản hồi từ applet
-                            String timeFromApplet = new String(responseData).trim();
-                            System.out.println("Dữ liệu checkout từ applet: " + timeFromApplet);
-
-                            // Ghi dữ liệu vào database
-                            String dataSend = !checkoutData.isEmpty() ? checkoutData + "-" + timeFromApplet : timeFromApplet;
-                            int result = EmployeeDAO.setTimeCheck(false, id, dataSend);
-
-                            if (result == 1) {
-                                System.out.println("Lưu time checkout vào database thành công");
-                                JOptionPane.showMessageDialog(this, "Checkout thành công.");
-                            } else {
-                                JOptionPane.showMessageDialog(this, "Không thể lưu time checkout vào database.");
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Không nhận được dữ liệu từ applet.");
-                        }
+                    if (result == 1) {
+                        System.out.println("Lưu time checkout vào database thành công");
+                        JOptionPane.showMessageDialog(this, "Checkout thành công.");
                     } else {
-                        JOptionPane.showMessageDialog(this, "Checkout không thành công trong applet.");
+                        JOptionPane.showMessageDialog(this, "Không thể lưu time checkout vào database.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Bạn đã checkout rồi.");
-
+                    JOptionPane.showMessageDialog(this, "Không nhận được dữ liệu từ applet.");
                 }
+            } else {
+                JOptionPane.showMessageDialog(this, "Checkout không thành công trong applet.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Bạn đã checkout rồi.");
+
+        }
 //            }
 //        } catch (Exception ex) {
 //            Logger.getLogger(DashBoard.class
@@ -713,17 +712,32 @@ public class DashBoard extends javax.swing.JFrame {
     private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
         // TODO add your handling code here:
         try {
-            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
-            imageSelector.openImageSelector(this, label_img);
+//            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
+            ImageSelectorComponent.openImageSelector(this, label_img);
             Image img_select = ImageSelectorComponent.selectedImage;
-
             Image avt = ImageSelectorComponent.selectedImage;
             if (avt != null) {
-                byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
-                ConnectCardUtils.sendExtendedApduFromString(imageBytes, this);
-//                
+                new Thread(() -> {
+                    try {
+                        byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
+//                        ConnectCardUtils.sendExtendedApduFromString(imageBytes,null);
+                        ConnectCardUtils.sendExtendedApduFromStringForUpdateImage(imageBytes);
+                        byte[] image = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_IMG);
+                        if (image.length > 0) {
+                            System.out.println("Do lon lon hon khonog");
+                            ImageUtils.displayImage(image, label_img);
+                        }
+//                        System.out.println("Code vẫn run tới đây mà");
+//                        JOptionPane.showMessageDialog(null, "Thay ảnh thành công");
+                    } catch (Exception e) {
+                        System.out.println("Error in background thread: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }).start();
             }
-            ImageUtils.printImageSize(img_select);
+//            
+//            ImageUtils.printImageSize(img_select);
+
         } catch (Exception ex) {
             System.out.println("Exception :" + ex.getMessage());
         }
