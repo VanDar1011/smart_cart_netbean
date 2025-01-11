@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public class ImageSelectorComponent {
 
@@ -22,11 +23,11 @@ public class ImageSelectorComponent {
         // Tạo JFileChooser để hiển thị hộp thoại chọn ảnh
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Chọn ảnh");
-        File defaultDirectory = new File("C:\\Users\\datth\\OneDrive\\Máy tính\\avt"); // Thay đường dẫn này bằng đường dẫn thư mục bạn muốn
+//        File defaultDirectory = new File("C:\\Users\\datth\\OneDrive\\Máy tính\\avt"); // Thay đường dẫn này bằng đường dẫn thư mục bạn muốn
+        File defaultDirectory = new File("./avt");
         fileChooser.setCurrentDirectory(defaultDirectory);
-
         // Lọc file ảnh (JPG, PNG, GIF)
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Ảnh (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"));
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Ảnh (JPG, PNG)", "jpg", "jpeg", "png"));
 
         // Hiển thị hộp thoại chọn file
         int result = fileChooser.showOpenDialog(parentFrame);
@@ -35,15 +36,33 @@ public class ImageSelectorComponent {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try {
-                // Cập nhật ảnh vào JLabel
-                Image image = ImageIO.read(selectedFile); // Đọc ảnh từ file
-                image = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Thay đổi kích thước ảnh
-                labelToUpdate.setIcon(new ImageIcon(image)); // Cập nhật JLabel bằng ảnh đã chọn
-                // Lưu vào biến static để sử dụng sau này
+                String extension = getFileExtension(selectedFile);
+                if ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension)) {
+                    BufferedImage image = ImageIO.read(selectedFile);
+                    // Chuyển ảnh sang PNG và lưu
+                    File outputFile = new File("./avt/" + selectedFile.getName().replaceAll("\\.jpg|\\.jpeg", ".png"));
+                    ImageIO.write(image, "PNG", outputFile);  // Lưu ảnh ở định dạng PNG
+
+                    // Đọc lại ảnh đã chuyển sang PNG
+                    selectedImage = ImageIO.read(outputFile);
+                    // Log to debug
+                    System.out.println("Ảnh đã được chuyển sang định dạng PNG!");
+                }
                 selectedImage = ImageIO.read(selectedFile);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
+    }
+
+    // Phương thức để lấy phần mở rộng của file
+    private String getFileExtension(File file) {
+        String extension = "";
+        String fileName = file.getName();
+        int i = fileName.lastIndexOf('.');
+        if (i > 0) {
+            extension = fileName.substring(i + 1);
+        }
+        return extension;
     }
 }

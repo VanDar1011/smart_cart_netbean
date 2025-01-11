@@ -22,7 +22,10 @@ import model.Employee;
  * @author datth
  */
 public class CreateNewCard extends javax.swing.JFrame {
+    
     private EntranceBK entranceBk;
+    private final int MAX_SIZE_IMAGE = 10240;
+
     /**
      * Creates new form CreateNewCard
      */
@@ -270,18 +273,18 @@ public class CreateNewCard extends javax.swing.JFrame {
     private void btn_save_both_imgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_save_both_imgActionPerformed
         // TODO add your handling code here:
         try {
-
+            
             String text_employee_code = txt_employee_code.getText();
             String text_name = txt_name.getText();
             String text_birthday = txt_birthday.getText();
             String text_position = txt_position.getText();
             String text_pincode = txt_pincode.getText();
             if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)
-                || StringUtils.isBlank(text_birthday) || StringUtils.isEmpty(text_birthday)
-                || StringUtils.isNull(text_birthday) || StringUtils.isBlank(text_position)
-                || StringUtils.isEmpty(text_position) || StringUtils.isNull(text_position)
-                || StringUtils.isBlank(text_pincode) || StringUtils.isEmpty(text_pincode)
-                || StringUtils.isNull(text_pincode)) {
+                    || StringUtils.isBlank(text_birthday) || StringUtils.isEmpty(text_birthday)
+                    || StringUtils.isNull(text_birthday) || StringUtils.isBlank(text_position)
+                    || StringUtils.isEmpty(text_position) || StringUtils.isNull(text_position)
+                    || StringUtils.isBlank(text_pincode) || StringUtils.isEmpty(text_pincode)
+                    || StringUtils.isNull(text_pincode)) {
                 JOptionPane.showMessageDialog(null, "Có trường bị trống");
                 return;
             }
@@ -306,7 +309,6 @@ public class CreateNewCard extends javax.swing.JFrame {
             if (avt != null) {
                 byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
                 ConnectCardUtils.sendExtendedApduFromString(imageBytes, this);
-                //
             }
             ConnectCardUtils.sendApdu(CommandDefine.CREATE_RSA_KEY);
             byte[] publicKey = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_PUCKEY);
@@ -315,7 +317,7 @@ public class CreateNewCard extends javax.swing.JFrame {
             EmployeeDAO.createAccount(text_employee_code, sPublicKey);
             //            ConnectCardUtils.disconnectCard();
             JOptionPane.showMessageDialog(null, "Tạo thẻ mới thành công");
-
+            
             EnterCode enterCode = new EnterCode();
             entranceBk.dispose();
             dispose();
@@ -332,7 +334,15 @@ public class CreateNewCard extends javax.swing.JFrame {
             imageSelector.openImageSelector(this, label_img);
             Image img_select = ImageSelectorComponent.selectedImage;
             //        System.out.println("Image Selected : \n" + ImageUtils.imageToHex(img_select) );
-            ImageUtils.printImageSize(img_select);
+            long sizeInBytes = ImageUtils.calculateImageSize(img_select);
+            if (sizeInBytes < MAX_SIZE_IMAGE) {
+                //                ImageUtils.printImageSize(img_select);
+                byte[] imageBytes = ImageUtils.imageToBytes(img_select, "png");
+                ImageUtils.displayImage(imageBytes, label_img);
+            } else {
+                JOptionPane.showMessageDialog(null, "Kích thước ảnh quá lớn vui lòng thử ảnh nhỏ hơn 10KB");
+                ImageSelectorComponent.selectedImage = null;
+            }
         } catch (Exception ex) {
             System.out.println("Exception :" + ex.getMessage());
         }
@@ -343,7 +353,7 @@ public class CreateNewCard extends javax.swing.JFrame {
     private void btn_save_inforActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_save_inforActionPerformed
         // TODO add your handling code here:
         try {
-
+            
             Employee new_employee = new Employee();
             String text_employee_code = txt_employee_code.getText();
             String text_name = txt_name.getText();
@@ -393,7 +403,6 @@ public class CreateNewCard extends javax.swing.JFrame {
             System.out.println("Exception :" + ex.getMessage());
             return false;
         }
-        
     }
 //    /**
 //     * @param args the command line arguments
