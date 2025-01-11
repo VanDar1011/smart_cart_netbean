@@ -4,8 +4,11 @@
  */
 package ui;
 
+import com.toedter.calendar.JDateChooser;
 import constant.CommandDefine;
 import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,20 +25,46 @@ import utils.StringUtils;
  * @author datth
  */
 public class ChangeInfor extends javax.swing.JFrame {
+
     private DashBoard db;
+    private JDateChooser dateChooser;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private final String[] roles = {"Nhân Viên", "Giám đốc"};
+    private String[] ids = {"NV", "GD"};
+
     /**
      * Creates new form ChangeInfor
      */
     public ChangeInfor(DashBoard db) {
         this.db = db;
+
+        // Khởi tạo các thành phần giao diện
         initComponents();
-        setVisible(true);
-        setLocationRelativeTo(null);
         setTitle("Change Infor");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setVisible(true);
+        setLocationRelativeTo(null);  // Đặt cửa sổ ở vị trí giữa màn hình
+        this.getContentPane().setBackground(new Color(0, 153, 153));  // Đặt màu nền cho form
+
+        // Thiết lập các trường không hiển thị
+        txt_chucvu.setVisible(false);
+        txt_birthday.setVisible(false);
+
+        // Cài đặt comboBox_Role
+        comboBox_Role.removeAllItems();
+        for (String role : roles) {
+            comboBox_Role.addItem(role);  // Thêm các mục vào combo box
+        }
+
+        // Thiết lập JDateChooser
+        dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("dd/MM/yyyy");
+        dateChooser.setMaxSelectableDate(new Date());  // Chỉ cho phép chọn ngày <= ngày hiện tại
+        dateChooser.setBounds(305, 160, 200, 30);  // Đặt vị trí và kích thước cho dateChooser
+        add(dateChooser);  // Thêm dateChooser vào form
+
+        // Đọc thông tin thẻ
         readInforCard();
-        txt_chucvu.setEditable(false);
-        this.getContentPane().setBackground(new Color(0, 153, 153));
     }
 
     /**
@@ -59,6 +88,7 @@ public class ChangeInfor extends javax.swing.JFrame {
         title_chucvu = new javax.swing.JLabel();
         txt_chucvu = new javax.swing.JTextField();
         btn_save = new javax.swing.JButton();
+        comboBox_Role = new javax.swing.JComboBox<>();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -76,8 +106,10 @@ public class ChangeInfor extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2 = new ImagePanel("/images/2.jpg");
 
+        txt_manv.setBackground(new java.awt.Color(0, 0, 0));
         txt_manv.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_manv.setForeground(new java.awt.Color(255, 255, 255));
+        txt_manv.setText("1111111");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -130,35 +162,17 @@ public class ChangeInfor extends javax.swing.JFrame {
             }
         });
 
+        comboBox_Role.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        comboBox_Role.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBox_RoleActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(4, 4, 4)
-                                    .addComponent(title_chucvu, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(87, 87, 87))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                    .addComponent(title_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(71, 71, 71)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(title_hoten, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(83, 83, 83)))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_hoten, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_chucvu, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(title_manv, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txt_manv, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(83, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(240, 240, 240)
                 .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -167,29 +181,62 @@ public class ChangeInfor extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(167, 167, 167))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(119, 119, 119)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addGap(4, 4, 4)
+                                            .addComponent(title_chucvu, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(87, 87, 87))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                            .addComponent(title_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(71, 71, 71)))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(title_hoten, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(83, 83, 83)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_hoten, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                                    .addComponent(comboBox_Role, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(title_manv, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txt_manv, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(txt_chucvu, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(txt_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(64, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_chucvu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(title_manv, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txt_manv, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(title_hoten)
+                    .addComponent(txt_hoten, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
+                .addComponent(title_birthday)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_hoten, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(title_hoten))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(title_birthday))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_chucvu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(title_chucvu))
-                .addGap(41, 41, 41)
+                    .addComponent(title_chucvu)
+                    .addComponent(comboBox_Role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
         );
@@ -198,7 +245,10 @@ public class ChangeInfor extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,28 +267,32 @@ public class ChangeInfor extends javax.swing.JFrame {
         String text_employee_code = txt_manv.getText();
         String text_name = txt_hoten.getText();
         System.out.println("Value of Name : " + text_name);
-        String text_birthday = txt_birthday.getText();
-        String text_position = txt_chucvu.getText();
+//        String text_birthday = txt_birthday.getText();
+        Date selectedDate = dateChooser.getDate();
+        String text_birthday = sdf.format(selectedDate);
+//        String text_position = txt_chucvu.getText();
         String text_pincode = "*";
         if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)
                 || StringUtils.isBlank(text_birthday) || StringUtils.isEmpty(text_birthday)
-                || StringUtils.isNull(text_birthday) || StringUtils.isBlank(text_position)
-                || StringUtils.isEmpty(text_position) || StringUtils.isNull(text_position)
+                || StringUtils.isNull(text_birthday)
+                //                || StringUtils.isBlank(text_position)
+                //                || StringUtils.isEmpty(text_position) || StringUtils.isNull(text_position)
                 || StringUtils.isBlank(text_pincode)) {
             JOptionPane.showMessageDialog(null, "Có trường bị trống");
             return;
         }
-        if (!isValidBirthday(text_birthday)) {
-            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ");
-            return;
-        }
+//        if (!isValidBirthday(text_birthday)) {
+//            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ");
+//            return;
+//        }
+        String selectedRole = (String) comboBox_Role.getSelectedItem();
         Employee new_employee = new Employee();
         new_employee.setEmployee_code(text_employee_code);
         new_employee.setName(text_name);
         new_employee.setBirthday(text_birthday);
-        new_employee.setPosition(text_position);
+        new_employee.setPosition(selectedRole);
         new_employee.setPin_code(text_pincode);
-        String combinedString = String.join(";", text_employee_code, text_name, text_birthday, text_position, text_pincode);
+        String combinedString = String.join(";", text_employee_code, text_name, text_birthday, selectedRole, text_pincode);
         byte[] employeeData = combinedString.getBytes();
         byte[] prefix = new byte[]{0x00, 0x01, 0x00, 0x00};
         byte[] fullData = ConnectCardUtils.createDataWithPrefix(employeeData, prefix);
@@ -268,6 +322,26 @@ public class ChangeInfor extends javax.swing.JFrame {
     private void txt_hotenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_hotenActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_hotenActionPerformed
+
+    private void comboBox_RoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_RoleActionPerformed
+        // TODO add your handling code here:
+        String ma_nv = txt_manv.getText();
+        String selectedRole = (String) comboBox_Role.getSelectedItem();
+
+        // Tìm ID tương ứng với vai trò đã chọn
+        String selectedId = null;
+        for (int i = 0; i < roles.length; i++) {
+            if (roles[i].equals(selectedRole)) {
+                selectedId = ids[i];  // Lấy giá trị ID tương ứng
+                break;
+            }
+        }
+
+        txt_manv.setText(selectedId + ma_nv.substring(2));
+
+        // In ra giá trị ID (ví dụ NV hoặc GD)
+        System.out.println("Selected Role: " + selectedRole + " | Corresponding ID: " + selectedId);
+    }//GEN-LAST:event_comboBox_RoleActionPerformed
     private void readInforCard() {
         // infort
         try {
@@ -278,10 +352,29 @@ public class ChangeInfor extends javax.swing.JFrame {
             System.out.println("Hexa : " + hexa);
             List<byte[]> parts = StringUtils.splitHexArrayBySemicolon(hexa);
             System.out.println("Parts : " + parts);
+
             txt_manv.setText(StringUtils.hexArrayToText(parts.get(0)));
             txt_hoten.setText(StringUtils.hexArrayToText(parts.get(1)));
-            txt_birthday.setText(StringUtils.hexArrayToText(parts.get(2)));
-            txt_chucvu.setText(StringUtils.hexArrayToText(parts.get(3)));
+            String birthday = StringUtils.hexArrayToText(parts.get(2));
+            Date parsedDate = sdf.parse(birthday);
+
+            // Đặt ngày vào JDateChooser
+            dateChooser.setDate(parsedDate);
+//            txt_birthday.setText(StringUtils.hexArrayToText(parts.get(2)));
+            String role = StringUtils.hexArrayToText(parts.get(3));
+            for (int i = 0; i < roles.length; i++) {
+                if (roles[i].equals(role)) {
+                    comboBox_Role.setSelectedIndex(i);
+                }
+            }
+//            String selectedId = null;
+//            String ma_nv = StringUtils.hexArrayToText(parts.get(0));
+//            for (int i = 0; i < roles.length; i++) {
+//                if (roles[i].equals(role)) {
+//                    selectedId = ids[i];  // Lấy giá trị ID tương ứng
+//                }
+//            }
+//            txt_chucvu.setText(StringUtils.hexArrayToText(parts.get(3)));
 //            String status;
 //            if (parts.get(4).length == 1 && parts.get(4)[0] == 0x00) {
 //                status = "active";
@@ -304,8 +397,45 @@ public class ChangeInfor extends javax.swing.JFrame {
 
     }
 
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(CreateNewCard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(CreateNewCard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(CreateNewCard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(CreateNewCard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            DashBoard db = new DashBoard();
+//            ChangeInfor en = new ChangeInfor(db);
+//            public void run() {
+//                new ChangeInfor(db).setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_save;
+    private javax.swing.JComboBox<String> comboBox_Role;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
