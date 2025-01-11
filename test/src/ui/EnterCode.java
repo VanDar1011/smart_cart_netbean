@@ -20,7 +20,7 @@ import utils.StringUtils;
  * @author proxc
  */
 public class EnterCode extends javax.swing.JFrame {
-
+    
     int countAuthenCard = 0;
 
     /**
@@ -32,6 +32,14 @@ public class EnterCode extends javax.swing.JFrame {
         setVisible(true);
         setLocationRelativeTo(null);
         txtPassword.setText("");
+        String statusCardCurrent = getStatus();
+        System.out.println("Take status of Card : " + statusCardCurrent);
+        if (statusCardCurrent.equals("01")) {
+            btnCheckPinCode.setEnabled(false);
+            btnUnLockCard.setEnabled(true);
+        } else {
+            btnUnLockCard.setEnabled(false);
+        }
     }
 
     /**
@@ -148,7 +156,7 @@ public class EnterCode extends javax.swing.JFrame {
                 .addContainerGap(157, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
         );
         jPanel2Layout.setVerticalGroup(
@@ -218,15 +226,15 @@ int xy;
     private void btnCheckPinCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckPinCodeActionPerformed
         // TODO add your handling code here:
         String pin = txtPassword.getText();
-        if (pin == null) {
-            JOptionPane.showMessageDialog(null, "Vui long nhap ma pin");
+        if (StringUtils.isBlank(pin) || StringUtils.isEmpty(pin) || StringUtils.isNull(pin)) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập mã pin");
             return;
         }
         boolean status = ConnectCardUtils.authenPin(pin);
         if (status) {
             countAuthenCard = 0;
             try {
-
+                
                 boolean statusAuthRsa = sign_process();
                 if (statusAuthRsa) {
                     dispose();
@@ -235,7 +243,7 @@ int xy;
                 } else {
                     return;
                 }
-
+                
             } catch (Exception ex) {
                 Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -246,21 +254,29 @@ int xy;
             if (countAuthenCard >= 5) {
                 JOptionPane.showMessageDialog(null, "Đã sai quá 5 lần, vui lòng mở khóa thẻ để tiếp tục");
                 btnCheckPinCode.setEnabled(false);
+                btnUnLockCard.setEnabled(true);
             }
-
+            
         }
     }//GEN-LAST:event_btnCheckPinCodeActionPerformed
 
     private void btnUnLockCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnLockCardActionPerformed
         // TODO add your handling code here:
+        countAuthenCard = 0;
         ConnectCardUtils.sendApdu(CommandDefine.UNCLOCK_CARD);
         btnCheckPinCode.setEnabled(true);
+        btnUnLockCard.setEnabled(false);
     }//GEN-LAST:event_btnUnLockCardActionPerformed
     private String getId() {
         byte[] result = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_ID);
         return StringUtils.hexArrayToText(result);
     }
-
+    
+    private String getStatus() {
+        byte[] result = ConnectCardUtils.getId(CommandDefine.GET_STATUS);
+        return StringUtils.bytesToHex(result);
+    }
+    
     private boolean sign_process() throws Exception {
         boolean status = false;
         try {
@@ -281,7 +297,7 @@ int xy;
             boolean authen = KeyUtils.verifySignature(arrayPublicKey, arrayRandom, dataSigned);
             if (authen) {
                 status = true;
-                System.out.println("ok");
+                System.out.println("authen ok");
                 JOptionPane.showMessageDialog(null, "Xác thực thành công");
             } else {
                 throw new Exception();

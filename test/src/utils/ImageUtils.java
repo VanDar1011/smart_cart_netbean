@@ -1,10 +1,13 @@
 package utils;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -153,9 +156,41 @@ public class ImageUtils {
             ImageIcon icon = new ImageIcon(scaledImage);
 
             // Đặt ImageIcon cho JLabel
+            // Đặt kích thước của JLabel bằng kích thước ảnh mới
+            label.setPreferredSize(new Dimension(newWidth, newHeight));
+            label.setSize(newWidth, newHeight);
             label.setIcon(icon);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Calculate the size of an image in memory based on its resolution and
+     * color model.
+     *
+     * @param img The image to calculate size for.
+     * @return The size in bytes.
+     */
+    public static long calculateImageSize(Image img) {
+        long sizeInBytes = (long) 0;
+        try {
+            BufferedImage bufferedImage = (BufferedImage) img;
+
+            // Chuyển đổi BufferedImage thành mảng byte
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+            byte[] imageBytes = byteArrayOutputStream.toByteArray();  // Chuyển đổi thành mảng byte
+            sizeInBytes = imageBytes.length;  // Kích thước hình ảnh tính theo byte
+            long sizeInBits = sizeInBytes * 8;    // Chuyển đổi sang bit
+
+            // In kích thước ra console
+            System.out.println("Image Size: " + sizeInBytes + " bytes");
+            System.out.println("Image Size: " + sizeInBits + " bits");
+        } catch (IOException ex) {
+            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sizeInBytes;
+    }
+
 }

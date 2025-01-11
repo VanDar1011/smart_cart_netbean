@@ -22,7 +22,13 @@ import model.Employee;
  * @author datth
  */
 public class CreateNewCard extends javax.swing.JFrame {
+
     private EntranceBK entranceBk;
+    private final int MAX_SIZE_IMAGE = 10240;
+    private final String[] roles = {"Nhân Viên", "Giám đốc"};
+    private String[] ids = {"NV", "GD"};
+    private String currentCode = null;
+
     /**
      * Creates new form CreateNewCard
      */
@@ -34,9 +40,21 @@ public class CreateNewCard extends javax.swing.JFrame {
         label_img.setText(null);
         btn_save_infor.setVisible(false);
         String employee_code = EmployeeUtils.generateEmployeeCode();
-        txt_employee_code.setText(employee_code);
+        currentCode = employee_code;
+        txt_employee_code.setText("NV" + employee_code);
+        txt_position.setVisible(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.entranceBk = entranceBk;
+
+        comboBox_Role.removeAllItems();
+
+        // Thêm từng mục vào comboBox_Role thủ công
+        for (String role : roles) {
+            comboBox_Role.addItem(role);
+        }
+        comboBox_Role.setSelectedItem("Nhân Viên");
+        // Nếu bạn muốn chọn một giá trị mặc định, ví dụ chọn "Nhân Viên"
+        comboBox_Role.setSelectedItem("Nhân Viên");
         this.getContentPane().setBackground(new Color(0, 153, 153));
     }
 
@@ -65,6 +83,7 @@ public class CreateNewCard extends javax.swing.JFrame {
         title_employee_code = new javax.swing.JLabel();
         txt_employee_code = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        comboBox_Role = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 153, 153));
@@ -154,6 +173,13 @@ public class CreateNewCard extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Thông tin thẻ");
 
+        comboBox_Role.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        comboBox_Role.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBox_RoleActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -165,9 +191,7 @@ public class CreateNewCard extends javax.swing.JFrame {
                         .addComponent(label_img, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(59, 59, 59)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_save_infor)
-                            .addComponent(btn_choie_img, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(btn_choie_img, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(57, 57, 57)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -176,7 +200,9 @@ public class CreateNewCard extends javax.swing.JFrame {
                                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
                                 .addComponent(title_position, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                            .addComponent(txt_pincode, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txt_pincode, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboBox_Role, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(title_birthday, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,8 +210,7 @@ public class CreateNewCard extends javax.swing.JFrame {
                             .addGap(31, 31, 31)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(txt_name, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                                .addComponent(txt_birthday)
-                                .addComponent(txt_position))))
+                                .addComponent(txt_birthday))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(title_employee_code)
@@ -196,18 +221,28 @@ public class CreateNewCard extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btn_save_both_img, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(181, 181, 181))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(234, 234, 234))))
+                        .addGap(234, 234, 234))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btn_save_both_img, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(181, 181, 181))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(btn_save_infor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_position, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_position, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_save_infor))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
+                        .addGap(37, 37, 37)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -223,8 +258,8 @@ public class CreateNewCard extends javax.swing.JFrame {
                             .addComponent(title_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_position, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(title_position, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(title_position, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboBox_Role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txt_pincode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -232,13 +267,11 @@ public class CreateNewCard extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btn_save_both_img))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
+                        .addGap(96, 96, 96)
                         .addComponent(label_img, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btn_choie_img)))
-                .addGap(5, 5, 5)
-                .addComponent(btn_save_infor)
-                .addGap(0, 77, Short.MAX_VALUE))
+                .addGap(0, 108, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -277,11 +310,12 @@ public class CreateNewCard extends javax.swing.JFrame {
             String text_position = txt_position.getText();
             String text_pincode = txt_pincode.getText();
             if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)
-                || StringUtils.isBlank(text_birthday) || StringUtils.isEmpty(text_birthday)
-                || StringUtils.isNull(text_birthday) || StringUtils.isBlank(text_position)
-                || StringUtils.isEmpty(text_position) || StringUtils.isNull(text_position)
-                || StringUtils.isBlank(text_pincode) || StringUtils.isEmpty(text_pincode)
-                || StringUtils.isNull(text_pincode)) {
+                    || StringUtils.isBlank(text_birthday) || StringUtils.isEmpty(text_birthday)
+                    || StringUtils.isNull(text_birthday)
+                    //                    || StringUtils.isBlank(text_position)
+                    //                    || StringUtils.isEmpty(text_position) || StringUtils.isNull(text_position)
+                    || StringUtils.isBlank(text_pincode) || StringUtils.isEmpty(text_pincode)
+                    || StringUtils.isNull(text_pincode)) {
                 JOptionPane.showMessageDialog(null, "Có trường bị trống");
                 return;
             }
@@ -289,13 +323,24 @@ public class CreateNewCard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ");
                 return;
             }
+            String selectedRole = (String) comboBox_Role.getSelectedItem();
+
+            // Tìm ID tương ứng với vai trò đã chọn
+            String selectedId = null;
+            for (int i = 0; i < roles.length; i++) {
+                if (roles[i].equals(selectedRole)) {
+                    selectedId = ids[i];  // Lấy giá trị ID tương ứng
+                    break;
+                }
+            }
+
             Employee new_employee = new Employee();
             new_employee.setEmployee_code(text_employee_code);
             new_employee.setName(text_name);
             new_employee.setBirthday(text_birthday);
-            new_employee.setPosition(text_position);
+            new_employee.setPosition(selectedRole);
             new_employee.setPin_code(text_pincode);
-            String combinedString = String.join(";", text_employee_code, text_name, text_birthday, text_position, text_pincode);
+            String combinedString = String.join(";", text_employee_code, text_name, text_birthday, selectedRole, text_pincode);
             byte[] employeeData = combinedString.getBytes();
             byte[] prefix = new byte[]{0x00, 0x01, 0x00, 0x00};
             byte[] fullData = ConnectCardUtils.createDataWithPrefix(employeeData, prefix);
@@ -306,7 +351,6 @@ public class CreateNewCard extends javax.swing.JFrame {
             if (avt != null) {
                 byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
                 ConnectCardUtils.sendExtendedApduFromString(imageBytes, this);
-                //
             }
             ConnectCardUtils.sendApdu(CommandDefine.CREATE_RSA_KEY);
             byte[] publicKey = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_PUCKEY);
@@ -332,7 +376,15 @@ public class CreateNewCard extends javax.swing.JFrame {
             imageSelector.openImageSelector(this, label_img);
             Image img_select = ImageSelectorComponent.selectedImage;
             //        System.out.println("Image Selected : \n" + ImageUtils.imageToHex(img_select) );
-            ImageUtils.printImageSize(img_select);
+            long sizeInBytes = ImageUtils.calculateImageSize(img_select);
+            if (sizeInBytes < MAX_SIZE_IMAGE) {
+                //                ImageUtils.printImageSize(img_select);
+                byte[] imageBytes = ImageUtils.imageToBytes(img_select, "png");
+                ImageUtils.displayImage(imageBytes, label_img);
+            } else {
+                JOptionPane.showMessageDialog(null, "Kích thước ảnh quá lớn vui lòng thử ảnh nhỏ hơn 10KB");
+                ImageSelectorComponent.selectedImage = null;
+            }
         } catch (Exception ex) {
             System.out.println("Exception :" + ex.getMessage());
         }
@@ -383,6 +435,24 @@ public class CreateNewCard extends javax.swing.JFrame {
             Logger.getLogger(CreateNewCard.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_save_inforActionPerformed
+
+    private void comboBox_RoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_RoleActionPerformed
+        // TODO add your handling code here:
+        String selectedRole = (String) comboBox_Role.getSelectedItem();
+
+        // Tìm ID tương ứng với vai trò đã chọn
+        String selectedId = null;
+        for (int i = 0; i < roles.length; i++) {
+            if (roles[i].equals(selectedRole)) {
+                selectedId = ids[i];  // Lấy giá trị ID tương ứng
+                break;
+            }
+        }
+        txt_employee_code.setText(selectedId + currentCode);
+
+        // In ra giá trị ID (ví dụ NV hoặc GD)
+        System.out.println("Selected Role: " + selectedRole + " | Corresponding ID: " + selectedId);
+    }//GEN-LAST:event_comboBox_RoleActionPerformed
     public boolean isValidBirthday(String birthday) {
         try {
             String regex = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$"; // dd/mm/yyyy
@@ -393,8 +463,8 @@ public class CreateNewCard extends javax.swing.JFrame {
             System.out.println("Exception :" + ex.getMessage());
             return false;
         }
-        
     }
+
 //    /**
 //     * @param args the command line arguments
 //     */
@@ -425,6 +495,7 @@ public class CreateNewCard extends javax.swing.JFrame {
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            EntranceBK en = new EntranceBK();
+//
 //            public void run() {
 //                new CreateNewCard(en).setVisible(true);
 //            }
@@ -435,6 +506,7 @@ public class CreateNewCard extends javax.swing.JFrame {
     private javax.swing.JButton btn_choie_img;
     private javax.swing.JButton btn_save_both_img;
     private javax.swing.JButton btn_save_infor;
+    private javax.swing.JComboBox<String> comboBox_Role;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

@@ -143,6 +143,12 @@ public class ChangeFirstPin extends javax.swing.JFrame {
         // validate password
         String oldPin = txt_old_pin.getText();
         String newPin = txt_new_pin.getText();
+        if (StringUtils.isBlank(oldPin) || StringUtils.isBlank(oldPin)
+                || StringUtils.isEmpty(oldPin) || StringUtils.isEmpty(newPin)
+                || StringUtils.isNull(oldPin) || StringUtils.isNull(newPin)) {
+            JOptionPane.showMessageDialog(null, "Mật khẩu không được để trống");
+            return;
+        }
         if (newPin.equals(oldPin)) {
             JOptionPane.showMessageDialog(null, "Mã pin mới không được giống pin cũ");
             return;
