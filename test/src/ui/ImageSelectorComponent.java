@@ -40,7 +40,9 @@ public class ImageSelectorComponent {
                 if ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension)) {
                     BufferedImage image = ImageIO.read(selectedFile);
                     // Chuyển ảnh sang PNG và lưu
-                    File outputFile = new File("./avt/" + selectedFile.getName().replaceAll("\\.jpg|\\.jpeg", ".png"));
+                    // File outputFile = new File("./avt/" + selectedFile.getName().replaceAll("\\.jpg|\\.jpeg", ".png"));
+                    File outputFile = new File("./avt/convert_image.png");
+
                     ImageIO.write(image, "PNG", outputFile);  // Lưu ảnh ở định dạng PNG
 
                     // Đọc lại ảnh đã chuyển sang PNG
