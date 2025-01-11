@@ -194,9 +194,11 @@ public class EntranceBK extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             if (!ConnectCardUtils.isConnected()) {
-                JOptionPane.showMessageDialog(null, "Vui lòng connect với card trước khi gửi lệnh");
-                System.out.println("Vui long connect truoc khi gui lenh");
-                return;
+//                JOptionPane.showMessageDialog(null, "Vui lòng connect với card trước khi gửi lệnh");
+//                System.out.println("Vui long connect truoc khi gui lenh");
+//                return;
+                ConnectCardUtils.connectCard();
+
             }
             CreateNewCard creatNewCard = new CreateNewCard(this);
 

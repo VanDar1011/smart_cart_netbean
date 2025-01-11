@@ -100,6 +100,11 @@ public class ThongKe extends javax.swing.JFrame {
 
         btn_ok.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btn_ok.setText("Về Home");
+        btn_ok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_okActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -172,6 +177,11 @@ public class ThongKe extends javax.swing.JFrame {
            String employeeId = txtSearch.getText().trim();
                 loadDataToTable(employeeId); // Lọc theo mã nhân viên
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btn_okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_okActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btn_okActionPerformed
  private void setupTable() {
         // Định nghĩa cột cho JTable
         String[] columnNames = {"Mã Nhân Viên", "Giờ Check-In", "Giờ Check-Out"};
