@@ -323,6 +323,10 @@ public class CreateNewCard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ");
                 return;
             }
+            if(text_name.length() > 32){
+                JOptionPane.showMessageDialog(null, "Tên quá dài");
+                return;
+            }
             String selectedRole = (String) comboBox_Role.getSelectedItem();
 
             // Tìm ID tương ứng với vai trò đã chọn
