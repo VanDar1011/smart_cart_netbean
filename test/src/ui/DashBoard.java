@@ -41,6 +41,7 @@ public class DashBoard extends javax.swing.JFrame {
     int countAuthenCard = 0;
     private int addDay = 0;
     boolean status = false;
+    private final int MAX_SIZE_IMAGE = 10240;
     static ConnectCardUtils connectCardUtils;
 
     public DashBoard() {
@@ -624,24 +625,34 @@ public class DashBoard extends javax.swing.JFrame {
                 ImageSelectorComponent.openImageSelector(this, label_img);
                 Image img_select = ImageSelectorComponent.selectedImage;
                 Image avt = ImageSelectorComponent.selectedImage;
-                if (avt != null) {
-                    new Thread(() -> {
-                        try {
-                            byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
+                long sizeInBytes = ImageUtils.calculateImageSize(img_select);
+                if (sizeInBytes < MAX_SIZE_IMAGE) {
+                    //                ImageUtils.printImageSize(img_select);
+//                    byte[] imageBytes = ImageUtils.imageToBytes(img_select, "png");
+//                    ImageUtils.displayImage(imageBytes, label_img);
+                    if (avt != null) {
+                        new Thread(() -> {
+                            try {
+                                byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
 //                        ConnectCardUtils.sendExtendedApduFromString(imageBytes,null);
-                            ConnectCardUtils.sendExtendedApduFromStringForUpdateImage(imageBytes);
-                            byte[] image = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_IMG);
-                            if (image.length > 0) {
-                                System.out.println("Do lon lon hon khonog");
-                                ImageUtils.displayImage(image, label_img);
-                            }
+                                ConnectCardUtils.sendExtendedApduFromStringForUpdateImage(imageBytes);
+                                byte[] image = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_IMG);
+                                if (image.length > 0) {
+                                    System.out.println("Do lon lon hon khonog");
+                                    ImageUtils.displayImage(image, label_img);
+                                }
 //                        System.out.println("Code vẫn run tới đây mà");
 //                        JOptionPane.showMessageDialog(null, "Thay ảnh thành công");
-                        } catch (Exception e) {
-                            System.out.println("Error in background thread: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                    }).start();
+                            } catch (Exception e) {
+                                System.out.println("Error in background thread: " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                        }).start();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Kích thước ảnh quá lớn vui lòng thử ảnh nhỏ hơn 10KB");
+                    ImageSelectorComponent.selectedImage = null;
+                    return;
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Xác thực không thành công");
