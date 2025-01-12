@@ -15,7 +15,7 @@ public class DatabaseConnection {
     // db 
     private static final String URL = "jdbc:postgresql://localhost:5432/java_card";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "123456";
+    private static final String PASSWORD = "admin123";
     private static Connection connection = null;
     public static Connection connect() {
         try {
