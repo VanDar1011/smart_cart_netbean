@@ -4,12 +4,15 @@
  */
 package ui;
 
+import com.toedter.calendar.JDateChooser;
 import constant.CommandDefine;
 import db.EmployeeDAO;
 import java.awt.Color;
 import utils.*;
 import java.awt.Image;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -28,6 +31,8 @@ public class CreateNewCard extends javax.swing.JFrame {
     private final String[] roles = {"Nhân Viên", "Giám đốc"};
     private String[] ids = {"NV", "GD"};
     private String currentCode = null;
+    private JDateChooser dateChooser;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Creates new form CreateNewCard
@@ -45,16 +50,20 @@ public class CreateNewCard extends javax.swing.JFrame {
         txt_position.setVisible(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.entranceBk = entranceBk;
-
+        txt_birthday.setVisible(false);
         comboBox_Role.removeAllItems();
 
         // Thêm từng mục vào comboBox_Role thủ công
         for (String role : roles) {
             comboBox_Role.addItem(role);
         }
-        comboBox_Role.setSelectedItem("Nhân Viên");
         // Nếu bạn muốn chọn một giá trị mặc định, ví dụ chọn "Nhân Viên"
         comboBox_Role.setSelectedItem("Nhân Viên");
+        dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("dd/MM/yyyy");
+        dateChooser.setMaxSelectableDate(new Date());// Định dạng ngày
+        dateChooser.setBounds(335, 165, 200, 30); // Chỉnh vị trí trên form
+        add(dateChooser);
         this.getContentPane().setBackground(new Color(0, 153, 153));
     }
 
@@ -306,7 +315,9 @@ public class CreateNewCard extends javax.swing.JFrame {
 
             String text_employee_code = txt_employee_code.getText();
             String text_name = txt_name.getText();
-            String text_birthday = txt_birthday.getText();
+//            String text_birthday = txt_birthday.getText();
+            Date selectedDate = dateChooser.getDate();
+            String text_birthday = sdf.format(selectedDate);
             String text_position = txt_position.getText();
             String text_pincode = txt_pincode.getText();
             if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)
@@ -323,17 +334,20 @@ public class CreateNewCard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ");
                 return;
             }
+            if (text_name.length() > 32) {
+                JOptionPane.showMessageDialog(null, "Tên quá dài");
+                return;
+            }
             String selectedRole = (String) comboBox_Role.getSelectedItem();
 
-            // Tìm ID tương ứng với vai trò đã chọn
-            String selectedId = null;
-            for (int i = 0; i < roles.length; i++) {
-                if (roles[i].equals(selectedRole)) {
-                    selectedId = ids[i];  // Lấy giá trị ID tương ứng
-                    break;
-                }
-            }
-
+//            // Tìm ID tương ứng với vai trò đã chọn
+//            String selectedId = null;
+//            for (int i = 0; i < roles.length; i++) {
+//                if (roles[i].equals(selectedRole)) {
+//                    selectedId = ids[i];  // Lấy giá trị ID tương ứng
+//                    break;
+//                }
+//            }
             Employee new_employee = new Employee();
             new_employee.setEmployee_code(text_employee_code);
             new_employee.setName(text_name);
@@ -372,8 +386,8 @@ public class CreateNewCard extends javax.swing.JFrame {
     private void btn_choie_imgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_choie_imgActionPerformed
         // TODO add your handling code here:
         try {
-            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
-            imageSelector.openImageSelector(this, label_img);
+//            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
+            ImageSelectorComponent.openImageSelector(this, label_img);
             Image img_select = ImageSelectorComponent.selectedImage;
             //        System.out.println("Image Selected : \n" + ImageUtils.imageToHex(img_select) );
             long sizeInBytes = ImageUtils.calculateImageSize(img_select);

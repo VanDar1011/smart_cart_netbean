@@ -97,7 +97,7 @@ public class EntranceBK extends javax.swing.JFrame {
 
         exit.setBackground(new java.awt.Color(255, 255, 255));
         exit.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        exit.setForeground(new java.awt.Color(255, 255, 255));
+        exit.setForeground(new java.awt.Color(255, 0, 0));
         exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exit.setText("X");
         exit.addMouseListener(new java.awt.event.MouseAdapter() {

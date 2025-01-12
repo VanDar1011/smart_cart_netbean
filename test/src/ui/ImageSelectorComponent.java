@@ -19,7 +19,7 @@ public class ImageSelectorComponent {
     public static Image selectedImage = null;
 
     // Phương thức để tạo thành phần chọn ảnh
-    public void openImageSelector(JFrame parentFrame, JLabel labelToUpdate) {
+    public static void openImageSelector(JFrame parentFrame, JLabel labelToUpdate) {
         // Tạo JFileChooser để hiển thị hộp thoại chọn ảnh
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Chọn ảnh");
@@ -58,7 +58,7 @@ public class ImageSelectorComponent {
     }
 
     // Phương thức để lấy phần mở rộng của file
-    private String getFileExtension(File file) {
+    private static String getFileExtension(File file) {
         String extension = "";
         String fileName = file.getName();
         int i = fileName.lastIndexOf('.');

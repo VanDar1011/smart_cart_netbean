@@ -583,17 +583,32 @@ public class DashBoard extends javax.swing.JFrame {
     private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
         // TODO add your handling code here:
         try {
-            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
-            imageSelector.openImageSelector(this, label_img);
+//            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
+            ImageSelectorComponent.openImageSelector(this, label_img);
             Image img_select = ImageSelectorComponent.selectedImage;
-
             Image avt = ImageSelectorComponent.selectedImage;
             if (avt != null) {
-                byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
-                ConnectCardUtils.sendExtendedApduFromString(imageBytes, this);
-//                
+                new Thread(() -> {
+                    try {
+                        byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
+//                        ConnectCardUtils.sendExtendedApduFromString(imageBytes,null);
+                        ConnectCardUtils.sendExtendedApduFromStringForUpdateImage(imageBytes);
+                        byte[] image = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_IMG);
+                        if (image.length > 0) {
+                            System.out.println("Do lon lon hon khonog");
+                            ImageUtils.displayImage(image, label_img);
+                        }
+//                        System.out.println("Code vẫn run tới đây mà");
+//                        JOptionPane.showMessageDialog(null, "Thay ảnh thành công");
+                    } catch (Exception e) {
+                        System.out.println("Error in background thread: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }).start();
             }
-            ImageUtils.printImageSize(img_select);
+//            
+//            ImageUtils.printImageSize(img_select);
+
         } catch (Exception ex) {
             System.out.println("Exception :" + ex.getMessage());
         }

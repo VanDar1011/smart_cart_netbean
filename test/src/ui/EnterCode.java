@@ -119,7 +119,7 @@ public class EnterCode extends javax.swing.JFrame {
 
         exit.setBackground(new java.awt.Color(231, 73, 134));
         exit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        exit.setForeground(new java.awt.Color(231, 73, 134));
+        exit.setForeground(new java.awt.Color(255, 0, 0));
         exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exit.setText("X");
         exit.addMouseListener(new java.awt.event.MouseAdapter() {
