@@ -28,8 +28,31 @@ public class CreateNewCard extends javax.swing.JFrame {
 
     private EntranceBK entranceBk;
     private final int MAX_SIZE_IMAGE = 10240;
-    private final String[] roles = {"Nhân Viên", "Giám đốc"};
-    private String[] ids = {"NV", "GD"};
+    private final String[] roles = {
+        "Nhân Viên", // Employee
+        "Giám đốc", // Director
+        "Quản lý", // Manager
+        "Trưởng phòng", // Department Head
+        "Lập trình viên", // Developer
+        "Kế toán", // Accountant
+        "Thư ký", // Secretary
+        "Nhân viên kỹ thuật", // Technical Staff
+        "Chuyên viên", // Specialist
+        "Giám sát", // Supervisor
+    };
+
+    private final String[] ids = {
+        "NV", // Employee
+        "GD", // Director
+        "QL", // Manager
+        "TP", // Department Head
+        "TV", // Developer
+        "KT", // Accountant
+        "SK", // Secretary
+        "NVKT",// Technical Staff
+        "CV", // Specialist
+        "GS", // Supervisor
+    };
     private String currentCode = null;
     private JDateChooser dateChooser;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

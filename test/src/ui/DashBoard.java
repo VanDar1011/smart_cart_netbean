@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -34,7 +35,9 @@ public class DashBoard extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//    yyyy-MM-dd HH:mm:ss
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");
     int countAuthenCard = 0;
     private int addDay = 0;
     boolean status = false;
@@ -102,11 +105,11 @@ public class DashBoard extends javax.swing.JFrame {
         title_status = new javax.swing.JLabel();
         txt_status = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        exit = new javax.swing.JLabel();
         btnChangeImage = new javax.swing.JButton();
         txt_dob = new javax.swing.JLabel();
         txt_time = new javax.swing.JLabel();
         btn_increase = new javax.swing.JButton();
+        exit = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
@@ -282,7 +285,7 @@ public class DashBoard extends javax.swing.JFrame {
         label_img.setBackground(new java.awt.Color(255, 102, 102));
         label_img.setForeground(new java.awt.Color(255, 51, 153));
         label_img.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
-        jPanel4.add(label_img, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 118, 176));
+        jPanel4.add(label_img, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 118, 176));
 
         title_employee_code.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         title_employee_code.setForeground(new java.awt.Color(255, 255, 255));
@@ -332,18 +335,6 @@ public class DashBoard extends javax.swing.JFrame {
         jPanel4.add(txt_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 320, 240, 20));
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(884, 478, 37, -1));
 
-        exit.setBackground(new java.awt.Color(231, 73, 134));
-        exit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        exit.setForeground(new java.awt.Color(231, 73, 134));
-        exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        exit.setText("X");
-        exit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                exitMouseClicked(evt);
-            }
-        });
-        jPanel4.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 0, 26, 28));
-
         btnChangeImage.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnChangeImage.setText("Thay ảnh");
         btnChangeImage.addActionListener(new java.awt.event.ActionListener() {
@@ -362,7 +353,7 @@ public class DashBoard extends javax.swing.JFrame {
         txt_time.setForeground(new java.awt.Color(0, 153, 204));
         txt_time.setText("null");
         txt_time.setAlignmentX(0.5F);
-        jPanel4.add(txt_time, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 200, 30));
+        jPanel4.add(txt_time, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 390, 130, 30));
 
         btn_increase.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btn_increase.setText("Tăng Ngày");
@@ -372,6 +363,18 @@ public class DashBoard extends javax.swing.JFrame {
             }
         });
         jPanel4.add(btn_increase, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, -1, -1));
+
+        exit.setBackground(new java.awt.Color(255, 255, 255));
+        exit.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        exit.setForeground(new java.awt.Color(255, 255, 255));
+        exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        exit.setText("X");
+        exit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                exitMouseClicked(evt);
+            }
+        });
+        jPanel4.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 39, -1));
 
         javax.swing.GroupLayout pnl_overlayLayout = new javax.swing.GroupLayout(pnl_overlay);
         pnl_overlay.setLayout(pnl_overlayLayout);
@@ -450,11 +453,6 @@ public class DashBoard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnChangePinActionPerformed
 
-    private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
-        // TODO add your handling code here:
-        System.exit(0);
-    }//GEN-LAST:event_exitMouseClicked
-
     private void btnChangeInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeInfoActionPerformed
         // TODO add your handling code here:
         boolean statusAuthen;
@@ -483,10 +481,12 @@ public class DashBoard extends javax.swing.JFrame {
                     // Đóng form EnterCode1 sau khi xác thực thành công
                     String id = getId();  // Lấy ID của người dùng
                     System.out.println("Value of Id: " + id);
-                    String customDateTime = txt_time.getText(); // Lấy thời gian từ JTextField
-                    boolean checkinSuccess = EmployeeDAO.checkin(id, customDateTime);
+                    String currentDate = txt_time.getText();
+                    String currentTime = timeFormatter.format(new Date());
+                    String combinedDateTime = currentDate + " " + currentTime;
+                    boolean checkinSuccess = EmployeeDAO.checkin(id, combinedDateTime);
                     if (checkinSuccess) {
-                        System.out.println("Đã check-in thành công với thời gian: " + customDateTime);
+                        System.out.println("Đã check-in thành công với thời gian: " + combinedDateTime);
                     }
                 }
             }
@@ -502,10 +502,12 @@ public class DashBoard extends javax.swing.JFrame {
                 if (isAuthenticated) {
                     String id = getId();  // Lấy ID của người dùng
                     System.out.println("Value of Id: " + id);
-                    String customDateTime = txt_time.getText(); // Lấy thời gian từ JTextField
-                    boolean checkinSuccess = EmployeeDAO.checkout(id, customDateTime);
+                    String currentDate = txt_time.getText();
+                    String currentTime = timeFormatter.format(new Date());
+                    String combinedDateTime = currentDate + " " + currentTime;
+                    boolean checkinSuccess = EmployeeDAO.checkout(id, combinedDateTime);
                     if (checkinSuccess) {
-                        System.out.println("Đã check-in thành công với thời gian: " + customDateTime);
+                        System.out.println("Đã check-in thành công với thời gian: " + combinedDateTime);
                     }
                 }
             }
@@ -549,15 +551,26 @@ public class DashBoard extends javax.swing.JFrame {
     }
     private void btn_increaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_increaseActionPerformed
         // TODO add your handling code here:
-        addDay++;
-        String currentDateTimeText = txt_time.getText();
-        LocalDateTime currentDateTime = LocalDateTime.parse(currentDateTimeText, formatter);
+//        addDay++;
+//        String currentDateTimeText = txt_time.getText();
+//        LocalDateTime currentDateTime = LocalDateTime.parse(currentDateTimeText, formatter);
+//
+//        // Tăng thêm 1 ngày
+//        LocalDateTime newDateTime = currentDateTime.plusDays(1);
+//
+//        // Cập nhật lại JTextField
+//        txt_time.setText(newDateTime.format(formatter));
+        String currentDateText = txt_time.getText();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Chuyển đổi ngày từ chuỗi sang LocalDate
+        LocalDate currentDate = LocalDate.parse(currentDateText, formatter);
 
         // Tăng thêm 1 ngày
-        LocalDateTime newDateTime = currentDateTime.plusDays(1);
+        LocalDate newDate = currentDate.plusDays(1);
 
-        // Cập nhật lại JTextField
-        txt_time.setText(newDateTime.format(formatter));
+        // Cập nhật lại JTextField với ngày mới
+        txt_time.setText(newDate.format(formatter));
     }//GEN-LAST:event_btn_increaseActionPerformed
     public void readInforCard() {
         // infort
@@ -602,35 +615,40 @@ public class DashBoard extends javax.swing.JFrame {
     }
     private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
         // TODO add your handling code here:
+        boolean statusAuthen;
         try {
+            statusAuthen = sign_process();
+            if (statusAuthen) {
+
 //            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
-            ImageSelectorComponent.openImageSelector(this, label_img);
-            Image img_select = ImageSelectorComponent.selectedImage;
-            Image avt = ImageSelectorComponent.selectedImage;
-            if (avt != null) {
-                new Thread(() -> {
-                    try {
-                        byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
+                ImageSelectorComponent.openImageSelector(this, label_img);
+                Image img_select = ImageSelectorComponent.selectedImage;
+                Image avt = ImageSelectorComponent.selectedImage;
+                if (avt != null) {
+                    new Thread(() -> {
+                        try {
+                            byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
 //                        ConnectCardUtils.sendExtendedApduFromString(imageBytes,null);
-                        ConnectCardUtils.sendExtendedApduFromStringForUpdateImage(imageBytes);
-                        byte[] image = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_IMG);
-                        if (image.length > 0) {
-                            System.out.println("Do lon lon hon khonog");
-                            ImageUtils.displayImage(image, label_img);
-                        }
+                            ConnectCardUtils.sendExtendedApduFromStringForUpdateImage(imageBytes);
+                            byte[] image = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_IMG);
+                            if (image.length > 0) {
+                                System.out.println("Do lon lon hon khonog");
+                                ImageUtils.displayImage(image, label_img);
+                            }
 //                        System.out.println("Code vẫn run tới đây mà");
 //                        JOptionPane.showMessageDialog(null, "Thay ảnh thành công");
-                    } catch (Exception e) {
-                        System.out.println("Error in background thread: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                }).start();
+                        } catch (Exception e) {
+                            System.out.println("Error in background thread: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }).start();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
             }
-//            
-//            ImageUtils.printImageSize(img_select);
-
         } catch (Exception ex) {
-            System.out.println("Exception :" + ex.getMessage());
+            Logger.getLogger(DashBoard.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnChangeImageActionPerformed
 
@@ -653,6 +671,11 @@ public class DashBoard extends javax.swing.JFrame {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }//GEN-LAST:event_btnThongkeActionPerformed
+
+    private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_exitMouseClicked
 
 //    /**
 //     * @param args the command line arguments

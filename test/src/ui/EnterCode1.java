@@ -10,6 +10,7 @@ import db.EmployeeDAO;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import utils.ConnectCardUtils;
 import utils.KeyUtils;
@@ -19,24 +20,25 @@ import utils.StringUtils;
  *
  * @author proxc
  */
-public class EnterCode1 extends javax.swing.JFrame  {
+public class EnterCode1 extends javax.swing.JFrame {
 
     int countAuthenCard = 0;
     private AuthCallback callback;
+
     /**
      * Creates new form NewJFrame
      */
     public EnterCode1(AuthCallback callback) {
-     
+
         initComponents();
-         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); 
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Enter Pincode");
         setVisible(true);
         setLocationRelativeTo(null);
         txtPassword.setText("");
         String statusCardCurrent = getStatus();
         System.out.println("Take status of Card : " + statusCardCurrent);
-          this.callback = callback; 
+        this.callback = callback;
         if (statusCardCurrent.equals("01")) {
             btnCheckPinCode.setEnabled(false);
             btnUnLockCard.setEnabled(true);
@@ -120,9 +122,9 @@ public class EnterCode1 extends javax.swing.JFrame  {
             }
         });
 
-        exit.setBackground(new java.awt.Color(231, 73, 134));
+        exit.setBackground(new java.awt.Color(255, 255, 255));
         exit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        exit.setForeground(new java.awt.Color(231, 73, 134));
+        exit.setForeground(new java.awt.Color(255, 255, 255));
         exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exit.setText("X");
         exit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -209,7 +211,8 @@ int xy;
 
     private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
         // TODO add your handling code here:
-        System.exit(0);
+//        System.exit(0);
+        this.dispose();
     }//GEN-LAST:event_exitMouseClicked
 
     private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
@@ -235,19 +238,18 @@ int xy;
         }
         boolean status = ConnectCardUtils.authenPin(pin);
         if (status) {
-          
-            
+
             countAuthenCard = 0;
             try {
 
                 boolean statusAuthRsa = sign_process();
                 if (statusAuthRsa) {
-                      if (callback != null) {
-                       callback.onAuthenticated(true);
+                    if (callback != null) {
+                        callback.onAuthenticated(true);
                     }
                     dispose(); // Đóng form sau khi xác thực thành công
                 } else {
-                  
+
                 }
 
             } catch (Exception ex) {
@@ -256,22 +258,22 @@ int xy;
 //            readInforCard();
 
         } else {
-           
+
             countAuthenCard++;
             // Kiểm tra số lần nhập sai và thông báo
-        int remainingAttempts = 5 - countAuthenCard; // Tính số lần thử còn lại
-        if (countAuthenCard >= 5) {
-            JOptionPane.showMessageDialog(null, "Đã sai quá 5 lần, vui lòng mở khóa thẻ để tiếp tục");
-            btnCheckPinCode.setEnabled(false); // Vô hiệu hóa nút nhập mã PIN
-            btnUnLockCard.setEnabled(true); // Hiển thị nút mở khóa thẻ
-        } else {
-            // Hiển thị thông báo số lần thử còn lại
-            JOptionPane.showMessageDialog(null, "Mã PIN không đúng. Bạn còn " + remainingAttempts + " lần thử.");
-        }
+            int remainingAttempts = 5 - countAuthenCard; // Tính số lần thử còn lại
+            if (countAuthenCard >= 5) {
+                JOptionPane.showMessageDialog(null, "Đã sai quá 5 lần, vui lòng mở khóa thẻ để tiếp tục");
+                btnCheckPinCode.setEnabled(false); // Vô hiệu hóa nút nhập mã PIN
+                btnUnLockCard.setEnabled(true); // Hiển thị nút mở khóa thẻ
+            } else {
+                // Hiển thị thông báo số lần thử còn lại
+                JOptionPane.showMessageDialog(null, "Mã PIN không đúng. Bạn còn " + remainingAttempts + " lần thử.");
+            }
 
         }
     }//GEN-LAST:event_btnCheckPinCodeActionPerformed
-  
+
     private void btnUnLockCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnLockCardActionPerformed
         // TODO add your handling code here:
         countAuthenCard = 0;
