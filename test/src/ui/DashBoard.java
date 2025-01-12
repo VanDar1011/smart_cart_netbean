@@ -25,7 +25,6 @@ import javax.swing.JOptionPane;
 import javax.smartcardio.CardException;
 import javax.swing.JFrame;
 
-
 /**
  *
  * @author proxc
@@ -438,7 +437,17 @@ public class DashBoard extends javax.swing.JFrame {
 
     private void btnChangePinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePinActionPerformed
         // TODO add your handling code here:
-        ChangeFirstPin updatePin = new ChangeFirstPin();
+        boolean statusAuthen;
+        try {
+            statusAuthen = sign_process();
+            if (statusAuthen) {
+                ChangeFirstPin updatePin = new ChangeFirstPin();
+            } else {
+                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(DashBoard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnChangePinActionPerformed
 
     private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
@@ -448,9 +457,20 @@ public class DashBoard extends javax.swing.JFrame {
 
     private void btnChangeInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeInfoActionPerformed
         // TODO add your handling code here:
-        ChangeInfor changeInfor = new ChangeInfor(this);
-//        readInforCard();
-//        changeInfor.dispose();
+        boolean statusAuthen;
+        try {
+            statusAuthen = sign_process();
+            if (statusAuthen) {
+                ChangeInfor changeInfor = new ChangeInfor(this);
+            } else {
+                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(DashBoard.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_btnChangeInfoActionPerformed
 
     private void btnCheckinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckinActionPerformed
@@ -471,8 +491,6 @@ public class DashBoard extends javax.swing.JFrame {
                 }
             }
         }).setVisible(true);
-
-
     }//GEN-LAST:event_btnCheckinActionPerformed
 
 
@@ -515,15 +533,17 @@ public class DashBoard extends javax.swing.JFrame {
             boolean authen = KeyUtils.verifySignature(arrayPublicKey, arrayRandom, dataSigned);
             if (authen) {
                 status = true;
-                System.out.println("ok");
-                JOptionPane.showMessageDialog(null, "Xác thực thành công");
+//                System.out.println("ok");
+//                JOptionPane.showMessageDialog(null, "Xác thực thành công");
             } else {
                 throw new Exception();
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            System.out.println("SQL error " + e.getMessage());
+//            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            System.out.println("Exception error " + e.getMessage());
+//            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
         }
         return status;
     }
@@ -622,14 +642,15 @@ public class DashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCheckout1ActionPerformed
 
     private void btnThongkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThongkeActionPerformed
-       JFrame frame = new JFrame("Ứng dụng Quản lý Chấm Công");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame frame = new JFrame("Ứng dụng Quản lý Chấm Công");
+        // Chỉ đóng JFrame mới
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1000, 500);
 
         // Thêm AttendanceTablePanel vào JFrame
         Statistical attendancePanel = new Statistical();
         frame.add(attendancePanel);
-        frame.setLocationRelativeTo(null); 
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }//GEN-LAST:event_btnThongkeActionPerformed
 
