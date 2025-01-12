@@ -301,22 +301,27 @@ public class ChangeInfor extends javax.swing.JFrame {
             return;
         }
         LocalDate birthday = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now();
 
-            // Tính số năm giữa ngày sinh và ngày hiện tại
-            long age = ChronoUnit.YEARS.between(birthday, today);
+        // Tính số năm giữa ngày sinh và ngày hiện tại
+        long age = ChronoUnit.YEARS.between(birthday, today);
 
-            if (age < 18) {
-                JOptionPane.showMessageDialog(null, "Người dùng phải đủ 18 tuổi.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        if (age < 18) {
+            JOptionPane.showMessageDialog(null, "Người dùng phải đủ 18 tuổi.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         String text_birthday = sdf.format(selectedDate);
         String text_pincode = "*";
         if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)
                 || StringUtils.isBlank(text_birthday) || StringUtils.isEmpty(text_birthday)
                 || StringUtils.isNull(text_birthday)
                 || StringUtils.isBlank(text_pincode)) {
-            JOptionPane.showMessageDialog(null, "Tên bị trống");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Tên không được để trống. Vui lòng nhập tên của bạn!",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
             return;
         }
         String selectedRole = (String) comboBox_Role.getSelectedItem();
@@ -334,11 +339,22 @@ public class ChangeInfor extends javax.swing.JFrame {
         System.out.println("Employee Data with Length : " + hexData.length());
         try {
             ConnectCardUtils.sendApduFromString(hexData, this);
-            JOptionPane.showMessageDialog(null, "Đổi thông tin thành công");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Đổi thông tin thành công!",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
             db.readInforCard();
             dispose();
         } catch (InterruptedException ex) {
             Logger.getLogger(ChangeFirstPin.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Đã xảy ra lỗi khi thực hiện thao tác. Vui lòng thử lại.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }//GEN-LAST:event_btn_saveActionPerformed
     public boolean isValidBirthday(String birthday) {

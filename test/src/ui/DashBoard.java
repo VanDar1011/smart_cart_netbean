@@ -447,7 +447,12 @@ public class DashBoard extends javax.swing.JFrame {
             if (statusAuthen) {
                 ChangeFirstPin updatePin = new ChangeFirstPin();
             } else {
-                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Xác thực không thành công. Vui lòng kiểm tra lại thông tin và thử lại!",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
             }
         } catch (Exception ex) {
             Logger.getLogger(DashBoard.class.getName()).log(Level.SEVERE, null, ex);
@@ -462,7 +467,12 @@ public class DashBoard extends javax.swing.JFrame {
             if (statusAuthen) {
                 ChangeInfor changeInfor = new ChangeInfor(this);
             } else {
-                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Xác thực không thành công. Vui lòng kiểm tra lại thông tin và thử lại!",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
             }
         } catch (Exception ex) {
             Logger.getLogger(DashBoard.class
@@ -488,6 +498,12 @@ public class DashBoard extends javax.swing.JFrame {
                     boolean checkinSuccess = EmployeeDAO.checkin(id, combinedDateTime);
                     if (checkinSuccess) {
                         System.out.println("Đã check-in thành công với thời gian: " + combinedDateTime);
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Đã check-in thành công với thời gian: " + combinedDateTime,
+                                "Thông báo",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
                     }
                 }
             }
@@ -508,7 +524,13 @@ public class DashBoard extends javax.swing.JFrame {
                     String combinedDateTime = currentDate + " " + currentTime;
                     boolean checkinSuccess = EmployeeDAO.checkout(id, combinedDateTime);
                     if (checkinSuccess) {
-                        System.out.println("Đã check-in thành công với thời gian: " + combinedDateTime);
+                        System.out.println("Đã check-out thành công với thời gian: " + combinedDateTime);
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Đã check-out thành công với thời gian: " + combinedDateTime,
+                                "Thông báo",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
                     }
                 }
             }
@@ -605,6 +627,12 @@ public class DashBoard extends javax.swing.JFrame {
             }
 
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Lỗi khi đọc thông tin từ thẻ. Vui lòng thử lại hoặc kiểm tra thẻ của bạn.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
             System.out.println("Exception : " + e.getMessage());
         }
 
@@ -650,14 +678,30 @@ public class DashBoard extends javax.swing.JFrame {
                         }).start();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Kích thước ảnh quá lớn vui lòng thử ảnh nhỏ hơn 10KB");
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Kích thước ảnh quá lớn. Vui lòng thử ảnh có kích thước nhỏ hơn 10KB.",
+                            "Lỗi",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     ImageSelectorComponent.selectedImage = null;
                     return;
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Xác thực không thành công. Vui lòng kiểm tra lại thông tin và thử lại.",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
             }
         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Đã có lỗi xảy ra",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
             Logger.getLogger(DashBoard.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
