@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.smartcardio.CardException;
+import javax.swing.JFrame;
 
 /**
  *
@@ -33,7 +35,9 @@ public class DashBoard extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//    yyyy-MM-dd HH:mm:ss
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");
     int countAuthenCard = 0;
     private int addDay = 0;
     boolean status = false;
@@ -101,11 +105,11 @@ public class DashBoard extends javax.swing.JFrame {
         title_status = new javax.swing.JLabel();
         txt_status = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        exit = new javax.swing.JLabel();
         btnChangeImage = new javax.swing.JButton();
         txt_dob = new javax.swing.JLabel();
         txt_time = new javax.swing.JLabel();
         btn_increase = new javax.swing.JButton();
+        exit = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
@@ -281,7 +285,7 @@ public class DashBoard extends javax.swing.JFrame {
         label_img.setBackground(new java.awt.Color(255, 102, 102));
         label_img.setForeground(new java.awt.Color(255, 51, 153));
         label_img.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
-        jPanel4.add(label_img, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 118, 176));
+        jPanel4.add(label_img, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 118, 176));
 
         title_employee_code.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         title_employee_code.setForeground(new java.awt.Color(255, 255, 255));
@@ -331,18 +335,6 @@ public class DashBoard extends javax.swing.JFrame {
         jPanel4.add(txt_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 320, 240, 20));
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(884, 478, 37, -1));
 
-        exit.setBackground(new java.awt.Color(231, 73, 134));
-        exit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        exit.setForeground(new java.awt.Color(231, 73, 134));
-        exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        exit.setText("X");
-        exit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                exitMouseClicked(evt);
-            }
-        });
-        jPanel4.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 0, 26, 28));
-
         btnChangeImage.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnChangeImage.setText("Thay ảnh");
         btnChangeImage.addActionListener(new java.awt.event.ActionListener() {
@@ -361,7 +353,7 @@ public class DashBoard extends javax.swing.JFrame {
         txt_time.setForeground(new java.awt.Color(0, 153, 204));
         txt_time.setText("null");
         txt_time.setAlignmentX(0.5F);
-        jPanel4.add(txt_time, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 200, 30));
+        jPanel4.add(txt_time, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 390, 130, 30));
 
         btn_increase.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btn_increase.setText("Tăng Ngày");
@@ -371,6 +363,18 @@ public class DashBoard extends javax.swing.JFrame {
             }
         });
         jPanel4.add(btn_increase, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, -1, -1));
+
+        exit.setBackground(new java.awt.Color(255, 255, 255));
+        exit.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        exit.setForeground(new java.awt.Color(255, 255, 255));
+        exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        exit.setText("X");
+        exit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                exitMouseClicked(evt);
+            }
+        });
+        jPanel4.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 39, -1));
 
         javax.swing.GroupLayout pnl_overlayLayout = new javax.swing.GroupLayout(pnl_overlay);
         pnl_overlay.setLayout(pnl_overlayLayout);
@@ -436,191 +440,78 @@ public class DashBoard extends javax.swing.JFrame {
 
     private void btnChangePinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePinActionPerformed
         // TODO add your handling code here:
-        ChangeFirstPin updatePin = new ChangeFirstPin();
+        boolean statusAuthen;
+        try {
+            statusAuthen = sign_process();
+            if (statusAuthen) {
+                ChangeFirstPin updatePin = new ChangeFirstPin();
+            } else {
+                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(DashBoard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnChangePinActionPerformed
-
-    private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
-        // TODO add your handling code here:
-        System.exit(0);
-    }//GEN-LAST:event_exitMouseClicked
 
     private void btnChangeInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeInfoActionPerformed
         // TODO add your handling code here:
-        ChangeInfor changeInfor = new ChangeInfor(this);
-//        readInforCard();
-//        changeInfor.dispose();
+        boolean statusAuthen;
+        try {
+            statusAuthen = sign_process();
+            if (statusAuthen) {
+                ChangeInfor changeInfor = new ChangeInfor(this);
+            } else {
+                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(DashBoard.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_btnChangeInfoActionPerformed
 
     private void btnCheckinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckinActionPerformed
-//        Authenzation auth = new Authenzation(status);
-//        status
-//        if(status){
-        boolean allowCheckin = true;
-        String id = getId();
-        System.out.println("Value of Id : " + id);
 
-        // Lấy dữ liệu checkin từ DB
-        List dataCheckin = EmployeeDAO.queryDatabase(id);
-        System.out.println("Nội dung của dataCheckin: " + dataCheckin);
-        String checkinData = "";
-
-        if (dataCheckin.size() > 2 && dataCheckin.get(2) != null) {
-            checkinData = dataCheckin.get(2).toString();
-        }
-
-        // Kiểm tra xem nhân viên đã checkin trong ngày chưa
-        if (!checkinData.isEmpty()) {
-            String[] times = checkinData.split("-");
-            String now = getTime();
-            for (int i = 0; i < times.length; i++) {
-                String date = times[i].split(" ")[1]; // lấy ngày tháng năm
-                if (date.equals(now.split(" ")[1])) {
-                    allowCheckin = false;
-                    break;
-                }
-            }
-        }
-
-        if (allowCheckin) {
-            String now = getTime();
-            byte[] cmdSetCheckin = {(byte) 0x00, (byte) 0x20, (byte) 0x00, (byte) 0x00}; // Lệnh gửi check-in
-            byte[] data = now.getBytes();
-
-            // Gửi dữ liệu check-in lên applet
-            System.out.println("Gửi check-in: " + now);
-            connectCardUtils.sendAPDUtoApplet(cmdSetCheckin, data);
-
-            // Kiểm tra phản hồi từ applet
-            if (connectCardUtils.resAPDU.getSW1() == 0x90) {
-                System.out.println("Check-in lưu thành công trong applet.");
-
-                // Nhận dữ liệu check-in từ applet
-                byte[] cmdGetCheckin = {(byte) 0x00, (byte) 0x22, (byte) 0x00, (byte) 0x00}; // Lệnh nhận check-in
-                connectCardUtils.sendAPDUtoApplet(cmdGetCheckin, new byte[0]);
-
-                if (connectCardUtils.resAPDU.getSW1() == 0x90) {
-                    byte[] responseData = connectCardUtils.resAPDU.getData(); // Dữ liệu phản hồi
-                    String timeFromApplet = new String(responseData).trim();
-                    System.out.println("Dữ liệu từ applet: " + timeFromApplet);
-
-                    // Ghi dữ liệu vào DB
-                    String dataSend = !checkinData.isEmpty() ? checkinData + "-" + timeFromApplet : timeFromApplet;
-                    int result = EmployeeDAO.setTimeCheck(true, id, dataSend);
-
-                    if (result == 1) {
-                        System.out.println("Lưu time checkin vào database thành công");
-                        JOptionPane.showMessageDialog(this, "Checkin thành công.");
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Không thể lưu time checkin vào database.");
+        // Mở form EnterCode1 và truyền callback
+        new EnterCode1(new AuthCallback() {
+            @Override
+            public void onAuthenticated(boolean isAuthenticated) {
+                if (isAuthenticated) {
+                    // Đóng form EnterCode1 sau khi xác thực thành công
+                    String id = getId();  // Lấy ID của người dùng
+                    System.out.println("Value of Id: " + id);
+                    String currentDate = txt_time.getText();
+                    String currentTime = timeFormatter.format(new Date());
+                    String combinedDateTime = currentDate + " " + currentTime;
+                    boolean checkinSuccess = EmployeeDAO.checkin(id, combinedDateTime);
+                    if (checkinSuccess) {
+                        System.out.println("Đã check-in thành công với thời gian: " + combinedDateTime);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Không nhận được dữ liệu từ applet.");
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Check-in không thành công trong applet.");
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Bạn đã check-in rồi.");
-        }
-//        }else {
-//            JOptionPane.showMessageDialog(this, "Xác thực không thành công nên không thể checkin");
-//        }
-
-
+        }).setVisible(true);
     }//GEN-LAST:event_btnCheckinActionPerformed
 
+
     private void btnCheckoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckoutActionPerformed
-//        try {
-//            boolean statusAuth = sign_process();
-//            if (statusAuth) {
-        boolean allowCheckout = true;
-        String id = getId();
-        System.out.println("Value of Id : " + id);
-
-        // Lấy dữ liệu từ database
-        List data = EmployeeDAO.queryDatabase(id);
-        String checkoutData = data.toArray()[3].toString();
-        String checkinData = "";
-        if (data.size() > 2 && data.get(2) != null) {
-            checkinData = data.get(2).toString();
-        }
-        String now = getTime();
-        boolean hasCheckedInToday = false;
-
-        // Kiểm tra xem nhân viên đã checkin hôm nay chưa
-        if (!checkinData.isEmpty()) {
-            String[] times = checkinData.split("-");
-            for (String time : times) {
-                String date = time.split(" ")[1];
-                if (date.equals(now.split(" ")[1])) {
-                    hasCheckedInToday = true;
-                    break;
-                }
-            }
-        }
-
-        if (!hasCheckedInToday) {
-            JOptionPane.showMessageDialog(this, "Bạn cần checkin trước khi checkout.");
-            return; // Thoát nếu chưa checkin
-        }
-
-        // Kiểm tra xem nhân viên đã checkout hôm nay chưa
-        if (!checkoutData.isEmpty()) {
-            String[] times = checkoutData.split("-");
-            for (String time : times) {
-                String date = time.split(" ")[1];
-                if (date.equals(now.split(" ")[1])) {
-                    allowCheckout = false;
-                    break;
-                }
-            }
-        }
-
-        if (allowCheckout) {
-            // Gửi lệnh checkout tới applet
-            byte[] cmdSetCheckout = {(byte) 0x00, (byte) 0x21, (byte) 0x00, (byte) 0x00};
-            byte[] data1 = now.getBytes();
-            System.out.println("Gửi checkout: " + now);
-            connectCardUtils.sendAPDUtoApplet(cmdSetCheckout, data1);
-
-            // Kiểm tra phản hồi từ applet
-            if (connectCardUtils.resAPDU.getSW1() == 0x90) {
-                System.out.println("Checkout lưu thành công trong applet.");
-
-                // Lấy dữ liệu checkout từ applet
-                byte[] cmdGetCheckout = {(byte) 0x00, (byte) 0x23, (byte) 0x00, (byte) 0x00};
-                connectCardUtils.sendAPDUtoApplet(cmdGetCheckout, new byte[0]);
-
-                if (connectCardUtils.resAPDU.getSW1() == 0x90) {
-                    byte[] responseData = connectCardUtils.resAPDU.getData(); // Dữ liệu phản hồi từ applet
-                    String timeFromApplet = new String(responseData).trim();
-                    System.out.println("Dữ liệu checkout từ applet: " + timeFromApplet);
-
-                    // Ghi dữ liệu vào database
-                    String dataSend = !checkoutData.isEmpty() ? checkoutData + "-" + timeFromApplet : timeFromApplet;
-                    int result = EmployeeDAO.setTimeCheck(false, id, dataSend);
-
-                    if (result == 1) {
-                        System.out.println("Lưu time checkout vào database thành công");
-                        JOptionPane.showMessageDialog(this, "Checkout thành công.");
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Không thể lưu time checkout vào database.");
+        // Mở form EnterCode1 và truyền callback
+        new EnterCode1(new AuthCallback() {
+            @Override
+            public void onAuthenticated(boolean isAuthenticated) {
+                if (isAuthenticated) {
+                    String id = getId();  // Lấy ID của người dùng
+                    System.out.println("Value of Id: " + id);
+                    String currentDate = txt_time.getText();
+                    String currentTime = timeFormatter.format(new Date());
+                    String combinedDateTime = currentDate + " " + currentTime;
+                    boolean checkinSuccess = EmployeeDAO.checkout(id, combinedDateTime);
+                    if (checkinSuccess) {
+                        System.out.println("Đã check-in thành công với thời gian: " + combinedDateTime);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Không nhận được dữ liệu từ applet.");
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Checkout không thành công trong applet.");
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Bạn đã checkout rồi.");
-
-        }
-//            }
-//        } catch (Exception ex) {
-//            Logger.getLogger(DashBoard.class
-//                    .getName()).log(Level.SEVERE, null, ex);
-//        }
+        }).setVisible(true);
 
 
     }//GEN-LAST:event_btnCheckoutActionPerformed
@@ -644,29 +535,42 @@ public class DashBoard extends javax.swing.JFrame {
             boolean authen = KeyUtils.verifySignature(arrayPublicKey, arrayRandom, dataSigned);
             if (authen) {
                 status = true;
-                System.out.println("ok");
-                JOptionPane.showMessageDialog(null, "Xác thực thành công");
+//                System.out.println("ok");
+//                JOptionPane.showMessageDialog(null, "Xác thực thành công");
             } else {
                 throw new Exception();
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            System.out.println("SQL error " + e.getMessage());
+//            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            System.out.println("Exception error " + e.getMessage());
+//            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
         }
         return status;
     }
     private void btn_increaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_increaseActionPerformed
         // TODO add your handling code here:
-        addDay++;
-        String currentDateTimeText = txt_time.getText();
-        LocalDateTime currentDateTime = LocalDateTime.parse(currentDateTimeText, formatter);
+//        addDay++;
+//        String currentDateTimeText = txt_time.getText();
+//        LocalDateTime currentDateTime = LocalDateTime.parse(currentDateTimeText, formatter);
+//
+//        // Tăng thêm 1 ngày
+//        LocalDateTime newDateTime = currentDateTime.plusDays(1);
+//
+//        // Cập nhật lại JTextField
+//        txt_time.setText(newDateTime.format(formatter));
+        String currentDateText = txt_time.getText();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Chuyển đổi ngày từ chuỗi sang LocalDate
+        LocalDate currentDate = LocalDate.parse(currentDateText, formatter);
 
         // Tăng thêm 1 ngày
-        LocalDateTime newDateTime = currentDateTime.plusDays(1);
+        LocalDate newDate = currentDate.plusDays(1);
 
-        // Cập nhật lại JTextField
-        txt_time.setText(newDateTime.format(formatter));
+        // Cập nhật lại JTextField với ngày mới
+        txt_time.setText(newDate.format(formatter));
     }//GEN-LAST:event_btn_increaseActionPerformed
     public void readInforCard() {
         // infort
@@ -711,35 +615,40 @@ public class DashBoard extends javax.swing.JFrame {
     }
     private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
         // TODO add your handling code here:
+        boolean statusAuthen;
         try {
+            statusAuthen = sign_process();
+            if (statusAuthen) {
+
 //            ImageSelectorComponent imageSelector = new ImageSelectorComponent();
-            ImageSelectorComponent.openImageSelector(this, label_img);
-            Image img_select = ImageSelectorComponent.selectedImage;
-            Image avt = ImageSelectorComponent.selectedImage;
-            if (avt != null) {
-                new Thread(() -> {
-                    try {
-                        byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
+                ImageSelectorComponent.openImageSelector(this, label_img);
+                Image img_select = ImageSelectorComponent.selectedImage;
+                Image avt = ImageSelectorComponent.selectedImage;
+                if (avt != null) {
+                    new Thread(() -> {
+                        try {
+                            byte[] imageBytes = ImageUtils.imageToBytes(avt, "png");
 //                        ConnectCardUtils.sendExtendedApduFromString(imageBytes,null);
-                        ConnectCardUtils.sendExtendedApduFromStringForUpdateImage(imageBytes);
-                        byte[] image = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_IMG);
-                        if (image.length > 0) {
-                            System.out.println("Do lon lon hon khonog");
-                            ImageUtils.displayImage(image, label_img);
-                        }
+                            ConnectCardUtils.sendExtendedApduFromStringForUpdateImage(imageBytes);
+                            byte[] image = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_IMG);
+                            if (image.length > 0) {
+                                System.out.println("Do lon lon hon khonog");
+                                ImageUtils.displayImage(image, label_img);
+                            }
 //                        System.out.println("Code vẫn run tới đây mà");
 //                        JOptionPane.showMessageDialog(null, "Thay ảnh thành công");
-                    } catch (Exception e) {
-                        System.out.println("Error in background thread: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                }).start();
+                        } catch (Exception e) {
+                            System.out.println("Error in background thread: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }).start();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Xác thực không thành công");
             }
-//            
-//            ImageUtils.printImageSize(img_select);
-
         } catch (Exception ex) {
-            System.out.println("Exception :" + ex.getMessage());
+            Logger.getLogger(DashBoard.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnChangeImageActionPerformed
 
@@ -751,8 +660,22 @@ public class DashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCheckout1ActionPerformed
 
     private void btnThongkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThongkeActionPerformed
-        ThongKe thongke = new ThongKe();
+        JFrame frame = new JFrame("Ứng dụng Quản lý Chấm Công");
+        // Chỉ đóng JFrame mới
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(1000, 500);
+
+        // Thêm AttendanceTablePanel vào JFrame
+        Statistical attendancePanel = new Statistical();
+        frame.add(attendancePanel);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }//GEN-LAST:event_btnThongkeActionPerformed
+
+    private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_exitMouseClicked
 
 //    /**
 //     * @param args the command line arguments

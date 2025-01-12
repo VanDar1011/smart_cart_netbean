@@ -10,6 +10,7 @@ import db.EmployeeDAO;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import utils.ConnectCardUtils;
 import utils.KeyUtils;
@@ -20,7 +21,7 @@ import utils.StringUtils;
  * @author proxc
  */
 public class EnterCode extends javax.swing.JFrame {
-    
+
     int countAuthenCard = 0;
 
     /**
@@ -31,6 +32,7 @@ public class EnterCode extends javax.swing.JFrame {
         setTitle("Enter Pincode");
         setVisible(true);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         txtPassword.setText("");
         String statusCardCurrent = getStatus();
         System.out.println("Take status of Card : " + statusCardCurrent);
@@ -117,9 +119,9 @@ public class EnterCode extends javax.swing.JFrame {
             }
         });
 
-        exit.setBackground(new java.awt.Color(231, 73, 134));
+        exit.setBackground(new java.awt.Color(255, 255, 255));
         exit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        exit.setForeground(new java.awt.Color(255, 0, 0));
+        exit.setForeground(new java.awt.Color(255, 255, 255));
         exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exit.setText("X");
         exit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -201,12 +203,12 @@ public class EnterCode extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-int xy;
+    int xy;
     int xx;
 
     private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
         // TODO add your handling code here:
-        System.exit(0);
+        this.dispose();
     }//GEN-LAST:event_exitMouseClicked
 
     private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
@@ -234,7 +236,7 @@ int xy;
         if (status) {
             countAuthenCard = 0;
             try {
-                
+
                 boolean statusAuthRsa = sign_process();
                 if (statusAuthRsa) {
                     dispose();
@@ -243,7 +245,7 @@ int xy;
                 } else {
                     return;
                 }
-                
+
             } catch (Exception ex) {
                 Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -256,7 +258,7 @@ int xy;
                 btnCheckPinCode.setEnabled(false);
                 btnUnLockCard.setEnabled(true);
             }
-            
+
         }
     }//GEN-LAST:event_btnCheckPinCodeActionPerformed
 
@@ -271,12 +273,12 @@ int xy;
         byte[] result = ConnectCardUtils.sendApduHaveResponse(CommandDefine.GET_ID);
         return StringUtils.hexArrayToText(result);
     }
-    
+
     private String getStatus() {
         byte[] result = ConnectCardUtils.getId(CommandDefine.GET_STATUS);
         return StringUtils.bytesToHex(result);
     }
-    
+
     private boolean sign_process() throws Exception {
         boolean status = false;
         try {

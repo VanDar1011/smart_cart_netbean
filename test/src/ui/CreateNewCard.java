@@ -28,8 +28,31 @@ public class CreateNewCard extends javax.swing.JFrame {
 
     private EntranceBK entranceBk;
     private final int MAX_SIZE_IMAGE = 10240;
-    private final String[] roles = {"Nhân Viên", "Giám đốc"};
-    private String[] ids = {"NV", "GD"};
+    private final String[] roles = {
+        "Nhân Viên", // Employee
+        "Giám đốc", // Director
+        "Quản lý", // Manager
+        "Trưởng phòng", // Department Head
+        "Lập trình viên", // Developer
+        "Kế toán", // Accountant
+        "Thư ký", // Secretary
+        "Nhân viên kỹ thuật", // Technical Staff
+        "Chuyên viên", // Specialist
+        "Giám sát", // Supervisor
+    };
+
+    private final String[] ids = {
+        "NV", // Employee
+        "GD", // Director
+        "QL", // Manager
+        "TP", // Department Head
+        "TV", // Developer
+        "KT", // Accountant
+        "SK", // Secretary
+        "NVKT",// Technical Staff
+        "CV", // Specialist
+        "GS", // Supervisor
+    };
     private String currentCode = null;
     private JDateChooser dateChooser;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -57,13 +80,14 @@ public class CreateNewCard extends javax.swing.JFrame {
         for (String role : roles) {
             comboBox_Role.addItem(role);
         }
-        // Nếu bạn muốn chọn một giá trị mặc định, ví dụ chọn "Nhân Viên"
-        comboBox_Role.setSelectedItem("Nhân Viên");
+        comboBox_Role.setSelectedItem("Nhân Viên"); // Giá trị mặc định
+
+        // Tạo và cấu hình dateChooser
         dateChooser = new JDateChooser();
         dateChooser.setDateFormatString("dd/MM/yyyy");
-        dateChooser.setMaxSelectableDate(new Date());// Định dạng ngày
-        dateChooser.setBounds(335, 165, 200, 30); // Chỉnh vị trí trên form
-        add(dateChooser);
+        dateChooser.setMaxSelectableDate(new Date()); // Ngày không được vượt quá hôm nay
+        dateChooser.setBounds(335, 165, 200, 30);
+        add(dateChooser); // Thêm vào giao diện
         this.getContentPane().setBackground(new Color(0, 153, 153));
     }
 
@@ -297,6 +321,7 @@ public class CreateNewCard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void txt_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_nameActionPerformed
@@ -312,22 +337,19 @@ public class CreateNewCard extends javax.swing.JFrame {
     private void btn_save_both_imgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_save_both_imgActionPerformed
         // TODO add your handling code here:
         try {
-
             String text_employee_code = txt_employee_code.getText();
             String text_name = txt_name.getText();
-//            String text_birthday = txt_birthday.getText();
             Date selectedDate = dateChooser.getDate();
+            if (selectedDate == null) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày trước khi lưu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             String text_birthday = sdf.format(selectedDate);
-            String text_position = txt_position.getText();
             String text_pincode = txt_pincode.getText();
             if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)
-                    || StringUtils.isBlank(text_birthday) || StringUtils.isEmpty(text_birthday)
-                    || StringUtils.isNull(text_birthday)
-                    //                    || StringUtils.isBlank(text_position)
-                    //                    || StringUtils.isEmpty(text_position) || StringUtils.isNull(text_position)
                     || StringUtils.isBlank(text_pincode) || StringUtils.isEmpty(text_pincode)
                     || StringUtils.isNull(text_pincode)) {
-                JOptionPane.showMessageDialog(null, "Có trường bị trống");
+                JOptionPane.showMessageDialog(null, "Tên hoặc mã pin bị trống");
                 return;
             }
             if (!isValidBirthday(text_birthday)) {
@@ -339,15 +361,6 @@ public class CreateNewCard extends javax.swing.JFrame {
                 return;
             }
             String selectedRole = (String) comboBox_Role.getSelectedItem();
-
-//            // Tìm ID tương ứng với vai trò đã chọn
-//            String selectedId = null;
-//            for (int i = 0; i < roles.length; i++) {
-//                if (roles[i].equals(selectedRole)) {
-//                    selectedId = ids[i];  // Lấy giá trị ID tương ứng
-//                    break;
-//                }
-//            }
             Employee new_employee = new Employee();
             new_employee.setEmployee_code(text_employee_code);
             new_employee.setName(text_name);
@@ -377,6 +390,8 @@ public class CreateNewCard extends javax.swing.JFrame {
             EnterCode enterCode = new EnterCode();
             entranceBk.dispose();
             dispose();
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Không được để trống ngày sinh", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra");
             Logger.getLogger(CreateNewCard.class.getName()).log(Level.SEVERE, null, ex);

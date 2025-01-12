@@ -534,7 +534,7 @@ public class Home extends javax.swing.JFrame {
 
     private void btn_statisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_statisticActionPerformed
         // TODO add your handling code here:
-        ThongKe thongke = new ThongKe();
+//        ThongKe thongke = new ThongKe();
     }//GEN-LAST:event_btn_statisticActionPerformed
 
     private void btn_change_inforActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_change_inforActionPerformed

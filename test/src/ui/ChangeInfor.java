@@ -29,8 +29,31 @@ public class ChangeInfor extends javax.swing.JFrame {
     private DashBoard db;
     private JDateChooser dateChooser;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    private final String[] roles = {"Nhân Viên", "Giám đốc"};
-    private String[] ids = {"NV", "GD"};
+    private final String[] roles = {
+        "Nhân Viên", // Employee
+        "Giám đốc", // Director
+        "Quản lý", // Manager
+        "Trưởng phòng", // Department Head
+        "Lập trình viên", // Developer
+        "Kế toán", // Accountant
+        "Thư ký", // Secretary
+        "Nhân viên kỹ thuật", // Technical Staff
+        "Chuyên viên", // Specialist
+        "Giám sát", // Supervisor
+    };
+
+    private final String[] ids = {
+        "NV", // Employee
+        "GD", // Director
+        "QL", // Manager
+        "TP", // Department Head
+        "TV", // Developer
+        "KT", // Accountant
+        "SK", // Secretary
+        "NVKT",// Technical Staff
+        "CV", // Specialist
+        "GS", // Supervisor
+    };
 
     /**
      * Creates new form ChangeInfor
@@ -55,6 +78,7 @@ public class ChangeInfor extends javax.swing.JFrame {
         for (String role : roles) {
             comboBox_Role.addItem(role);  // Thêm các mục vào combo box
         }
+        comboBox_Role.setEnabled(false);
 
         // Thiết lập JDateChooser
         dateChooser = new JDateChooser();
@@ -269,22 +293,19 @@ public class ChangeInfor extends javax.swing.JFrame {
         System.out.println("Value of Name : " + text_name);
 //        String text_birthday = txt_birthday.getText();
         Date selectedDate = dateChooser.getDate();
+        if (selectedDate == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày trước khi lưu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         String text_birthday = sdf.format(selectedDate);
-//        String text_position = txt_chucvu.getText();
         String text_pincode = "*";
         if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)
                 || StringUtils.isBlank(text_birthday) || StringUtils.isEmpty(text_birthday)
                 || StringUtils.isNull(text_birthday)
-                //                || StringUtils.isBlank(text_position)
-                //                || StringUtils.isEmpty(text_position) || StringUtils.isNull(text_position)
                 || StringUtils.isBlank(text_pincode)) {
-            JOptionPane.showMessageDialog(null, "Có trường bị trống");
+            JOptionPane.showMessageDialog(null, "Tên bị trống");
             return;
         }
-//        if (!isValidBirthday(text_birthday)) {
-//            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ");
-//            return;
-//        }
         String selectedRole = (String) comboBox_Role.getSelectedItem();
         Employee new_employee = new Employee();
         new_employee.setEmployee_code(text_employee_code);
