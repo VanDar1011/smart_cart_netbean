@@ -181,7 +181,12 @@ public class EntranceBK extends javax.swing.JFrame {
         }
         String id = getId();
         if (id.equals("0000")) {
-            JOptionPane.showMessageDialog(null, "Thẻ chưa có thông tin vui lòng tạo mới thẻ");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Thẻ chưa có thông tin. Vui lòng tạo mới thẻ.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
         } else {
             EnterCode enterCode = new EnterCode();
             dispose();

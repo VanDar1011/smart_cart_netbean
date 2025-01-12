@@ -146,11 +146,21 @@ public class ChangeFirstPin extends javax.swing.JFrame {
         if (StringUtils.isBlank(oldPin) || StringUtils.isBlank(oldPin)
                 || StringUtils.isEmpty(oldPin) || StringUtils.isEmpty(newPin)
                 || StringUtils.isNull(oldPin) || StringUtils.isNull(newPin)) {
-            JOptionPane.showMessageDialog(null, "Mật khẩu không được để trống");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Mật khẩu không được để trống. Vui lòng nhập mật khẩu!",
+                    "Cảnh báo",
+                    JOptionPane.WARNING_MESSAGE
+            );
             return;
         }
         if (newPin.equals(oldPin)) {
-            JOptionPane.showMessageDialog(null, "Mã pin mới không được giống pin cũ");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Mã PIN mới không được giống mã PIN cũ. Vui lòng nhập mã PIN mới khác!",
+                    "Cảnh báo",
+                    JOptionPane.WARNING_MESSAGE
+            );
             return;
         }
         boolean status = ConnectCardUtils.authenPin(oldPin);
@@ -183,10 +193,20 @@ public class ChangeFirstPin extends javax.swing.JFrame {
             System.out.println("Employee Data with Length : " + hexData.length());
             try {
                 ConnectCardUtils.sendApduFromString(hexData, this);
-                JOptionPane.showMessageDialog(null, "Đổi mã pin thành công");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Đổi mã PIN thành công!",
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
                 dispose();
             } catch (InterruptedException ex) {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Đã có lỗi xảy ra. Vui lòng thử lại sau!",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
                 Logger.getLogger(ChangeFirstPin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

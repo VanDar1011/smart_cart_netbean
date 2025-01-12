@@ -362,15 +362,30 @@ public class CreateNewCard extends javax.swing.JFrame {
             if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)
                     || StringUtils.isBlank(text_pincode) || StringUtils.isEmpty(text_pincode)
                     || StringUtils.isNull(text_pincode)) {
-                JOptionPane.showMessageDialog(null, "Tên hoặc mã pin bị trống");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Tên hoặc mã pin bị trống. Vui lòng điền đầy đủ thông tin.",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
                 return;
             }
             if (!isValidBirthday(text_birthday)) {
-                JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Định dạng ngày không hợp lệ. Vui lòng nhập ngày theo định dạng đúng (yyyy-MM-dd).",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
                 return;
             }
             if (text_name.length() > 32) {
-                JOptionPane.showMessageDialog(null, "Tên quá dài");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Tên quá dài. Vui lòng nhập tên ngắn hơn.",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
                 return;
             }
             String selectedRole = (String) comboBox_Role.getSelectedItem();
@@ -398,15 +413,23 @@ public class CreateNewCard extends javax.swing.JFrame {
             System.out.println("Value of public Key : " + sPublicKey);
             EmployeeDAO.createAccount(text_employee_code, sPublicKey);
             //            ConnectCardUtils.disconnectCard();
-            JOptionPane.showMessageDialog(null, "Tạo thẻ mới thành công");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Tạo thẻ mới thành công.",
+                    "Thành công",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
 
             EnterCode enterCode = new EnterCode();
             entranceBk.dispose();
             dispose();
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "Không được để trống ngày sinh", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
             Logger.getLogger(CreateNewCard.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_save_both_imgActionPerformed
@@ -424,7 +447,12 @@ public class CreateNewCard extends javax.swing.JFrame {
                 byte[] imageBytes = ImageUtils.imageToBytes(img_select, "png");
                 ImageUtils.displayImage(imageBytes, label_img);
             } else {
-                JOptionPane.showMessageDialog(null, "Kích thước ảnh quá lớn vui lòng thử ảnh nhỏ hơn 10KB");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Kích thước ảnh quá lớn. Vui lòng thử ảnh nhỏ hơn 10KB.",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
                 ImageSelectorComponent.selectedImage = null;
             }
         } catch (Exception ex) {

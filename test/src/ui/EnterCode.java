@@ -229,7 +229,12 @@ public class EnterCode extends javax.swing.JFrame {
         // TODO add your handling code here:
         String pin = txtPassword.getText();
         if (StringUtils.isBlank(pin) || StringUtils.isEmpty(pin) || StringUtils.isNull(pin)) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập mã pin");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Vui lòng nhập mã pin.",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
             return;
         }
         boolean status = ConnectCardUtils.authenPin(pin);
@@ -249,14 +254,26 @@ public class EnterCode extends javax.swing.JFrame {
             } catch (Exception ex) {
                 Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
             }
-//            readInforCard();
-
         } else {
             countAuthenCard++;
+            int remainingAttempts = 5 - countAuthenCard;
             if (countAuthenCard >= 5) {
-                JOptionPane.showMessageDialog(null, "Đã sai quá 5 lần, vui lòng mở khóa thẻ để tiếp tục");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Đã sai quá 5 lần, vui lòng mở khóa thẻ để tiếp tục.",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                );
                 btnCheckPinCode.setEnabled(false);
                 btnUnLockCard.setEnabled(true);
+            } else {
+                // Hiển thị thông báo số lần thử còn lại
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Mã PIN không đúng. Bạn còn " + remainingAttempts + " lần thử.",
+                        "Cảnh báo",
+                        JOptionPane.WARNING_MESSAGE
+                );
             }
 
         }
@@ -300,14 +317,30 @@ public class EnterCode extends javax.swing.JFrame {
             if (authen) {
                 status = true;
                 System.out.println("authen ok");
-                JOptionPane.showMessageDialog(null, "Xác thực thành công");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Xác thực thành công.",
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
             } else {
                 throw new Exception();
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Xác thực không thành công. Vui lòng kiểm tra lại thông tin và thử lại.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Xác thực không thành công. Vui lòng kiểm tra lại thông tin và thử lại.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
         return status;
     }

@@ -23,6 +23,7 @@ public class Authenzation extends javax.swing.JFrame {
 
     int countAuthenCard = 0;
     boolean statusInDashboard;
+
     /**
      * Creates new form NewJFrame
      */
@@ -214,7 +215,8 @@ int xy;
         // TODO add your handling code here:
         String pin = txtPassword.getText();
         if (pin == null) {
-            JOptionPane.showMessageDialog(null, "Vui long nhap ma pin");
+            JOptionPane.showMessageDialog(null, "Vui long nhap ma pin", "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         boolean status = ConnectCardUtils.authenPin(pin);
@@ -239,7 +241,12 @@ int xy;
         } else {
             countAuthenCard++;
             if (countAuthenCard >= 5) {
-                JOptionPane.showMessageDialog(null, "Đã sai quá 5 lần, vui lòng mở khóa thẻ để tiếp tục");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Bạn đã nhập sai mã PIN quá 5 lần. Vui lòng mở khóa thẻ để tiếp tục.",
+                        "Cảnh báo bảo mật",
+                        JOptionPane.WARNING_MESSAGE
+                );
                 btnCheckPinCode.setEnabled(false);
             }
 
@@ -277,14 +284,29 @@ int xy;
             if (authen) {
                 status = true;
                 System.out.println("ok");
-                JOptionPane.showMessageDialog(null, "Xác thực thành công");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Xác thực thành công!",
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
             } else {
                 throw new Exception();
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Xác thực không thành công. Vui lòng thử lại!",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Xác thực không thành công");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Xác thực không thành công. Vui lòng thử lại!",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
         return status;
     }
