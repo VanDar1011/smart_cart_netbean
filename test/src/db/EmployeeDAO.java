@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-
 /**
  *
  * @author datth
@@ -111,14 +110,10 @@ public class EmployeeDAO {
         }
     }
 
-
-    
-
-
     public static boolean checkin(String accountId, String customDateTime) {
         String queryCheckExisting = "SELECT * FROM checkin_checkout WHERE id = ? AND date = CAST(? AS DATE)";
-        String insertCheckin = "INSERT INTO checkin_checkout (id, checkin_time, date) VALUES (?, CAST(? AS TIMESTAMP), CAST(? AS DATE))";
-
+//        String insertCheckin = "INSERT INTO checkin_checkout (id, checkin_time, date) VALUES (?, CAST(? AS TIMESTAMP), CAST(? AS DATE))";
+        String insertCheckin = "INSERT INTO checkin_checkout (id, checkin_time, date, created_at) VALUES (?, CAST(? AS TIMESTAMP), CAST(? AS DATE), CURRENT_TIMESTAMP)";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement checkStmt = conn.prepareStatement(queryCheckExisting); PreparedStatement insertStmt = conn.prepareStatement(insertCheckin)) {
 
             // Kiểm tra đã check-in chưa

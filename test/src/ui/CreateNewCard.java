@@ -9,6 +9,9 @@ import constant.CommandDefine;
 import db.EmployeeDAO;
 import java.awt.Color;
 import utils.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.awt.Image;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -342,6 +345,16 @@ public class CreateNewCard extends javax.swing.JFrame {
             Date selectedDate = dateChooser.getDate();
             if (selectedDate == null) {
                 JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày trước khi lưu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            LocalDate birthday = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate today = LocalDate.now();
+
+            // Tính số năm giữa ngày sinh và ngày hiện tại
+            long age = ChronoUnit.YEARS.between(birthday, today);
+
+            if (age < 18) {
+                JOptionPane.showMessageDialog(null, "Người dùng phải đủ 18 tuổi.", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             String text_birthday = sdf.format(selectedDate);

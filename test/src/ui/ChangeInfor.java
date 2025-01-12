@@ -10,6 +10,9 @@ import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -297,6 +300,16 @@ public class ChangeInfor extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày trước khi lưu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        LocalDate birthday = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate today = LocalDate.now();
+
+            // Tính số năm giữa ngày sinh và ngày hiện tại
+            long age = ChronoUnit.YEARS.between(birthday, today);
+
+            if (age < 18) {
+                JOptionPane.showMessageDialog(null, "Người dùng phải đủ 18 tuổi.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         String text_birthday = sdf.format(selectedDate);
         String text_pincode = "*";
         if (StringUtils.isBlank(text_name) || StringUtils.isEmpty(text_name) || StringUtils.isNull(text_name)

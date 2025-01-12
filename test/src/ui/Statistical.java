@@ -22,6 +22,7 @@ public class Statistical extends JPanel {
         String[] columnNames = {"Mã nhân viên", "Ngày làm việc", "Thời gian check-in", "Thời gian check-out", "Tổng giờ làm việc"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
+        table.setEnabled(false);
         table.setFillsViewportHeight(true);  // Đảm bảo bảng chiếm toàn bộ chiều cao
         table.setRowHeight(30);  // Thiết lập chiều cao mỗi dòng
         table.setSelectionBackground(new Color(85, 153, 255));  // Màu nền khi chọn dòng
@@ -62,14 +63,14 @@ public class Statistical extends JPanel {
         for (int i = 1; i <= 12; i++) {
             monthComboBox.addItem(String.format("%02d", i));  // Thêm các tháng từ 01 đến 12
         }
-
+        monthComboBox.setPreferredSize(new Dimension(50, 25));
         JLabel labelYear = new JLabel("Năm:");
         JComboBox<String> yearComboBox = new JComboBox<>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (int i = currentYear - 5; i <= currentYear; i++) {
             yearComboBox.addItem(String.valueOf(i));  // Thêm năm từ hiện tại trừ đi 5 năm
         }
-
+        yearComboBox.setPreferredSize(new Dimension(70, 25));
         yearComboBox.setSelectedItem(String.valueOf(currentYear));
 
         dateFilterPanel.add(labelMonth);
@@ -95,7 +96,7 @@ public class Statistical extends JPanel {
 
         // Kết nối và truy xuất dữ liệu từ cơ sở dữ liệu
         try (Connection conn = DatabaseConnection.connect()) {
-            String query = "SELECT id, date, checkin_time, checkout_time FROM checkin_checkout";
+            String query = "SELECT id, date, checkin_time, checkout_time FROM checkin_checkout order by created_at DESC";
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
